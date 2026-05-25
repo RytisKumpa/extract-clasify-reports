@@ -36,44 +36,17 @@ async def _resolve_schema(extract_config: ExtractConfig) -> dict[str, Any]:
 
 
 async def get_presentation_schema(
-    extract_10k: Annotated[
+    extract_investment: Annotated[
         ExtractConfig,
         ResourceConfig(
             config_file="configs/config.json",
-            path_selector="extract-10k",
-            label="10-K Extraction",
-        ),
-    ],
-    extract_10q: Annotated[
-        ExtractConfig,
-        ResourceConfig(
-            config_file="configs/config.json",
-            path_selector="extract-10q",
-            label="10-Q Extraction",
-        ),
-    ],
-    extract_8k: Annotated[
-        ExtractConfig,
-        ResourceConfig(
-            config_file="configs/config.json",
-            path_selector="extract-8k",
-            label="8-K Extraction",
-        ),
-    ],
-    extract_other: Annotated[
-        ExtractConfig,
-        ResourceConfig(
-            config_file="configs/config.json",
-            path_selector="extract-other",
-            label="Other Extraction",
+            path_selector="extract-investment",
+            label="Investment Analysis Extraction",
         ),
     ],
 ) -> dict[str, Any]:
     schemas = {
-        "10-K": await _resolve_schema(extract_10k),
-        "10-Q": await _resolve_schema(extract_10q),
-        "8-K": await _resolve_schema(extract_8k),
-        "other": await _resolve_schema(extract_other),
+        "investment_analysis": await _resolve_schema(extract_investment),
     }
     union = create_union_schema(schemas, discriminator_field=DISCRIMINATOR_FIELD)
     return {

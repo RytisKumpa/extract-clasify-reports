@@ -32,8 +32,8 @@ class FileEvent(StartEvent):
     file_hash: str | None = None
 
 
-class FileClassifiedEvent(Event):
-    filing_type: str
+class DocumentClassifiedEvent(Event):
+    document_type: str
     confidence: float | None = None
     reasoning: str | None = None
 
@@ -60,7 +60,7 @@ class ExtractionState(BaseModel):
     filename: str | None = None
     file_hash: str | None = None
     extract_job_id: str | None = None
-    filing_type: str | None = None
+    document_type: str | None = None
     classification_confidence: float | None = None
     classification_reasoning: str | None = None
 
@@ -80,7 +80,7 @@ async def _wait_for_classify(client: AsyncLlamaCloud, job_id: str) -> Any:
 
 
 class ProcessFileWorkflow(Workflow):
-    """Classify an SEC filing and extract the matching structured schema."""
+    """Classify an investment document and extract structured investment due diligence information."""
 
     @step()
     async def start_extraction(
@@ -94,13 +94,13 @@ class ProcessFileWorkflow(Workflow):
             ExtractConfig,
             ResourceConfig(
                 config_file="configs/config.json",
-                path_selector="extract-10k",
-                label="Default Extraction Settings",
-                description="Default extraction config (10-K); actual schema selected after classification",
+                path_selector="extract-investment",
+                label="Investment Analysis Extraction",
+                description="Comprehensive investment due diligence extraction with anti-hallucination policy",
             ),
         ],
     ) -> ExtractJobStartedEvent:
-        """Start extraction job for the document."""
+        """Start extraction job for the investment document."""
         file_id = event.file_id
         logger.info(f"Running file {file_id}")
 
@@ -122,9 +122,9 @@ class ProcessFileWorkflow(Workflow):
             )
             raise e
 
-        logger.info(f"Extracting data from file {filename}")
+        logger.info(f"Extracting investment due diligence data from file {filename}")
         ctx.write_event_to_stream(
-            Status(level="info", message=f"Extracting data from file {filename}")
+            Status(level="info", message=f"Extracting investment data from file {filename}")
         )
 
         if extract_config.configuration_id:
@@ -154,7 +154,7 @@ class ProcessFileWorkflow(Workflow):
         return ExtractJobStartedEvent()
 
     @step()
-    async def classify_file(
+    async def classify_document(
         self,
         event: ExtractJobStartedEvent,
         ctx: Context[ExtractionState],
@@ -166,20 +166,20 @@ class ProcessFileWorkflow(Workflow):
             ResourceConfig(
                 config_file="configs/config.json",
                 path_selector="classify",
-                label="Classification Rules",
-                description="Rules for classifying SEC filing types",
+                label="Investment Document Classification",
+                description="Rules for classifying investment document types (DD reports, IMs, pitch decks, etc.)",
             ),
         ],
-    ) -> FileClassifiedEvent:
-        """Classify the SEC filing document type in parallel with extraction."""
+    ) -> DocumentClassifiedEvent:
+        """Classify the investment document type in parallel with extraction."""
         state = await ctx.store.get_state()
         if state.file_id is None or state.filename is None:
             raise ValueError("File ID or filename is not set")
 
         try:
-            logger.info(f"Classifying file {state.filename}")
+            logger.info(f"Classifying investment document {state.filename}")
             ctx.write_event_to_stream(
-                Status(level="info", message=f"Classifying file {state.filename}")
+                Status(level="info", message=f"Classifying document type for {state.filename}")
             )
 
             if classify_config.configuration_id:
@@ -202,95 +202,71 @@ class ProcessFileWorkflow(Workflow):
 
             if completed.status == "FAILED" or completed.result is None:
                 logger.warning(
-                    f"Classification did not resolve for {state.filename}, defaulting to 'other'"
+                    f"Classification did not resolve for {state.filename}, defaulting to 'not_known'"
                 )
                 ctx.write_event_to_stream(
                     Status(
                         level="warning",
-                        message="Classification uncertain, using default schema",
+                        message="Document classification uncertain, using default schema",
                     )
                 )
                 async with ctx.store.edit_state() as state:
-                    state.filing_type = "other"
-                return FileClassifiedEvent(filing_type="other")
+                    state.document_type = "not_known"
+                return DocumentClassifiedEvent(document_type="not_known")
 
             result = completed.result
-            filing_type = result.type or "other"
+            document_type = result.type or "not_known"
             confidence = result.confidence
             reasoning = result.reasoning
 
             logger.info(
-                f"Classified {state.filename} as {filing_type} "
+                f"Classified {state.filename} as {document_type} "
                 f"(confidence: {confidence}, reasoning: {reasoning})"
             )
             ctx.write_event_to_stream(
                 Status(
                     level="info",
-                    message=f"Classified as {filing_type} SEC filing",
+                    message=f"Classified as {document_type}",
                 )
             )
 
             async with ctx.store.edit_state() as state:
-                state.filing_type = filing_type
+                state.document_type = document_type
                 state.classification_confidence = confidence
                 state.classification_reasoning = reasoning
 
-            return FileClassifiedEvent(
-                filing_type=filing_type,
+            return DocumentClassifiedEvent(
+                document_type=document_type,
                 confidence=confidence,
                 reasoning=reasoning,
             )
 
         except Exception as e:
-            logger.error(f"Error classifying file {state.filename}: {e}", exc_info=True)
+            logger.error(f"Error classifying document {state.filename}: {e}", exc_info=True)
             ctx.write_event_to_stream(
                 Status(
                     level="warning",
-                    message=f"Classification failed, using default schema: {e}",
+                    message=f"Document classification failed, using default schema: {e}",
                 )
             )
             async with ctx.store.edit_state() as state:
-                state.filing_type = "other"
-            return FileClassifiedEvent(filing_type="other")
+                state.document_type = "not_known"
+            return DocumentClassifiedEvent(document_type="not_known")
 
     @step()
     async def complete_extraction(
         self,
-        event: FileClassifiedEvent,
+        event: DocumentClassifiedEvent,
         ctx: Context[ExtractionState],
         llama_cloud_client: Annotated[
             AsyncLlamaCloud, Resource(get_llama_cloud_client)
         ],
-        extract_10k: Annotated[
+        extract_investment: Annotated[
             ExtractConfig,
             ResourceConfig(
                 config_file="configs/config.json",
-                path_selector="extract-10k",
-                label="10-K Extraction",
-            ),
-        ],
-        extract_10q: Annotated[
-            ExtractConfig,
-            ResourceConfig(
-                config_file="configs/config.json",
-                path_selector="extract-10q",
-                label="10-Q Extraction",
-            ),
-        ],
-        extract_8k: Annotated[
-            ExtractConfig,
-            ResourceConfig(
-                config_file="configs/config.json",
-                path_selector="extract-8k",
-                label="8-K Extraction",
-            ),
-        ],
-        extract_other: Annotated[
-            ExtractConfig,
-            ResourceConfig(
-                config_file="configs/config.json",
-                path_selector="extract-other",
-                label="Other Extraction",
+                path_selector="extract-investment",
+                label="Investment Analysis Extraction",
             ),
         ],
     ) -> StopEvent:
@@ -299,14 +275,8 @@ class ProcessFileWorkflow(Workflow):
         if state.extract_job_id is None:
             raise ValueError("Job ID cannot be null when waiting for its completion")
 
-        extract_configs = {
-            "10-K": extract_10k,
-            "10-Q": extract_10q,
-            "8-K": extract_8k,
-            "other": extract_other,
-        }
-        filing_type = state.filing_type or "other"
-        extract_config = extract_configs.get(filing_type, extract_other)
+        document_type = state.document_type or "not_known"
+        extract_config = extract_investment
 
         await llama_cloud_client.extract.wait_for_completion(
             state.extract_job_id,
@@ -336,13 +306,13 @@ class ProcessFileWorkflow(Workflow):
                 schema_class = get_extraction_schema(
                     dict(params.data_schema),
                     discriminator_field=DISCRIMINATOR_FIELD,
-                    discriminator_value=filing_type,
+                    discriminator_value=document_type,
                 )
             else:
                 schema_class = get_extraction_schema(
                     dict(extract_config.data_schema),
                     discriminator_field=DISCRIMINATOR_FIELD,
-                    discriminator_value=filing_type,
+                    discriminator_value=document_type,
                 )
 
             data = ExtractedData.from_extract_job(
@@ -354,7 +324,7 @@ class ProcessFileWorkflow(Workflow):
             )
             if data.metadata is None:
                 data.metadata = {}
-            data.metadata["classification"] = filing_type
+            data.metadata["document_type"] = document_type
             data.metadata["classification_confidence"] = state.classification_confidence
             data.metadata["classification_reasoning"] = state.classification_reasoning
             extracted_event = ExtractedEvent(data=data)
@@ -368,7 +338,7 @@ class ProcessFileWorkflow(Workflow):
             ctx.write_event_to_stream(
                 Status(
                     level="error",
-                    message=f"Error extracting data from file {state.filename}: {e}",
+                    message=f"Error extracting investment data from file {state.filename}: {e}",
                 )
             )
             raise e
@@ -398,12 +368,12 @@ class ProcessFileWorkflow(Workflow):
             collection=EXTRACTED_DATA_COLLECTION,
         )
         logger.info(
-            f"Recorded extracted data for file {extracted_data.file_name or ''}"
+            f"Recorded investment due diligence data for file {extracted_data.file_name or ''}"
         )
         ctx.write_event_to_stream(
             Status(
                 level="info",
-                message=f"Recorded extracted data for file {extracted_data.file_name or ''}",
+                message=f"Recorded investment data for file {extracted_data.file_name or ''}",
             )
         )
         return StopEvent(result=item.id)

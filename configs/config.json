@@ -4,20 +4,124 @@
     "configuration_id": null,
     "rules": [
       {
-        "type": "10-K",
-        "description": "Form 10-K is an annual report filed by public companies with the SEC. It provides a comprehensive summary of a company's financial performance for the year, including audited financial statements, management's discussion and analysis (MD&A), risk factors, business description, and executive compensation. Look for: 'Form 10-K', 'Annual Report', fiscal year references, audited financials."
+        "type": "commercial_dd",
+        "description": "Commercial due diligence report analyzing market positioning, competitive landscape, customer base, revenue model, and growth opportunities. Focuses on market size (TAM/SAM/SOM), competitive moat, unit economics, and commercial viability. Look for: market analysis, customer interviews, competitive analysis, revenue drivers."
       },
       {
-        "type": "10-Q",
-        "description": "Form 10-Q is a quarterly report filed by public companies with the SEC. It provides unaudited financial statements and management discussion for a specific quarter. Contains quarterly financial data, updates on business operations, and material changes. Look for: 'Form 10-Q', 'Quarterly Report', quarter references (Q1, Q2, Q3), unaudited statements."
+        "type": "tech_it_dd",
+        "description": "Technology and IT due diligence report evaluating technology stack, software architecture, IT infrastructure, cybersecurity posture, technical debt, scalability, and technology capabilities. Look for: technology assessment, system architecture, security review, technical infrastructure analysis."
       },
       {
-        "type": "8-K",
-        "description": "Form 8-K is a current report filed to announce material events or corporate changes. Used to notify investors of significant events like mergers, acquisitions, leadership changes, earnings releases, or other material corporate events that shareholders should know about. Look for: 'Form 8-K', 'Current Report', Item numbers (e.g., Item 1.01, Item 5.02), event dates, specific triggering events."
+        "type": "financial_dd",
+        "description": "Financial due diligence report analyzing financial statements, revenue quality, profitability, working capital, cash flow, debt structure, and financial projections. Focuses on financial health, accounting quality, and financial performance. Look for: financial analysis, accounting review, quality of earnings, financial projections."
+      },
+      {
+        "type": "operations_dd",
+        "description": "Operations due diligence report evaluating operational efficiency, supply chain, manufacturing processes, operational metrics, cost structure, and operational capabilities. Focuses on operational excellence and scalability. Look for: operational assessment, supply chain analysis, manufacturing capabilities, operational efficiency."
+      },
+      {
+        "type": "legal_dd",
+        "description": "Legal due diligence report reviewing corporate structure, contracts, intellectual property, regulatory compliance, litigation, and legal risks. Focuses on legal health and potential liabilities. Look for: legal review, contract analysis, IP assessment, regulatory compliance."
+      },
+      {
+        "type": "regulatory_dd",
+        "description": "Regulatory due diligence report analyzing regulatory environment, compliance status, regulatory risks, licenses, permits, and regulatory challenges. Focuses on regulatory compliance and risks. Look for: regulatory assessment, compliance review, licensing analysis."
+      },
+      {
+        "type": "esg_dd",
+        "description": "Environmental, Social, and Governance due diligence report evaluating ESG factors, sustainability practices, social impact, governance structure, and ESG risks/opportunities. Look for: ESG assessment, sustainability analysis, governance review, social impact evaluation."
+      },
+      {
+        "type": "hr_people_dd",
+        "description": "Human Resources and People due diligence report analyzing workforce composition, organizational structure, talent acquisition, retention, compensation, and human capital risks. Look for: HR assessment, organizational analysis, talent review, compensation structure."
+      },
+      {
+        "type": "tax_dd",
+        "description": "Tax due diligence report reviewing tax structure, tax compliance, tax liabilities, tax planning, and tax risks. Focuses on tax efficiency and compliance. Look for: tax analysis, compliance review, tax structure assessment."
+      },
+      {
+        "type": "insurance_dd",
+        "description": "Insurance due diligence report evaluating insurance coverage, risk management, claims history, insurance adequacy, and insurance gaps. Look for: insurance review, risk assessment, coverage analysis."
+      },
+      {
+        "type": "environmental_dd",
+        "description": "Environmental due diligence report analyzing environmental impact, contamination, environmental compliance, environmental risks, and sustainability practices. Look for: environmental assessment, contamination review, compliance analysis."
+      },
+      {
+        "type": "investment_memorandum",
+        "description": "Investment memorandum providing investment thesis, opportunity overview, financial highlights, market positioning, and investment rationale. Typically prepared by investment banks or financial advisors. Look for: investment thesis, opportunity overview, investment rationale, financial highlights."
+      },
+      {
+        "type": "information_memorandum_teaser",
+        "description": "Information memorandum teaser or preliminary investment document providing high-level overview of investment opportunity, key highlights, and basic investment information. Look for: teaser content, opportunity overview, key investment highlights."
+      },
+      {
+        "type": "management_presentation",
+        "description": "Management presentation or pitch deck presenting company overview, business model, market opportunity, financial performance, and growth strategy to investors. Look for: company overview, business model, market opportunity, financial presentation."
+      },
+      {
+        "type": "pitch_deck",
+        "description": "Pitch deck presenting investment opportunity, business concept, market opportunity, team, and investment terms to potential investors. Look for: pitch content, investment proposition, business concept presentation."
+      },
+      {
+        "type": "financial_statement",
+        "description": "Financial statement including balance sheet, income statement, cash flow statement, and financial metrics. Focuses on historical financial performance and position. Look for: financial statements, balance sheet, income statement, cash flow statement."
+      },
+      {
+        "type": "annual_report",
+        "description": "Annual report including financial statements, management discussion, business overview, and corporate governance information. Provides comprehensive annual performance review. Look for: annual financial report, MD&A, business description, corporate governance."
+      },
+      {
+        "type": "quarterly_report",
+        "description": "Quarterly report including quarterly financial statements, management discussion, and business updates. Focuses on quarterly performance and period-over-period comparisons. Look for: quarterly financial report, quarterly results, period updates."
+      },
+      {
+        "type": "internal_document",
+        "description": "Internal company document including strategy documents, internal memos, board materials, and internal analysis. Look for: internal content, strategy documents, internal analysis, board materials."
+      },
+      {
+        "type": "board_pack",
+        "description": "Board pack or board meeting materials including board presentations, financial reports, strategic updates, and governance information prepared for board meetings. Look for: board materials, board presentation, governance content."
+      },
+      {
+        "type": "analyst_report",
+        "description": "Analyst report providing investment analysis, company assessment, financial analysis, and investment recommendations from sell-side or buy-side analysts. Look for: analyst analysis, investment recommendation, company assessment, financial analysis."
+      },
+      {
+        "type": "market_research_report",
+        "description": "Market research report providing industry analysis, market size, trends, competitive landscape, and market outlook. Focuses on market dynamics and industry analysis. Look for: market analysis, industry research, market trends, competitive analysis."
+      },
+      {
+        "type": "broker_research",
+        "description": "Broker research report providing investment analysis, company coverage, financial analysis, and trading recommendations from brokerage firms. Look for: broker analysis, trading recommendation, company coverage, financial analysis."
+      },
+      {
+        "type": "expert_call_transcript",
+        "description": "Expert call transcript providing industry insights, market commentary, and expertise from industry experts or consultants. Look for: expert commentary, industry insights, expert interview content, market perspective."
+      },
+      {
+        "type": "management_call_transcript",
+        "description": "Management call transcript including earnings calls, investor presentations, and management commentary on business performance and strategy. Look for: management commentary, earnings call, investor communication, strategic updates."
+      },
+      {
+        "type": "customer_call_transcript",
+        "description": "Customer call transcript providing customer feedback, customer satisfaction, product insights, and customer experience information. Look for: customer feedback, customer insights, customer experience, product feedback."
+      },
+      {
+        "type": "earnings_call_transcript",
+        "description": "Earnings call transcript including Q&A with analysts, financial results discussion, and management commentary on quarterly performance and outlook. Look for: earnings discussion, Q&A content, financial results, management outlook."
+      },
+      {
+        "type": "other_transcript",
+        "description": "Other transcript types including various interviews, discussions, and conversations related to investment analysis. Look for: transcript content, discussion material, interview content."
+      },
+      {
+        "type": "not_known",
+        "description": "Document type cannot be determined from available information."
       },
       {
         "type": "other",
-        "description": "Any other SEC filing type not covered by 10-K, 10-Q, or 8-K. This includes forms such as S-1 (IPO registration), DEF 14A (proxy statement), 13F (institutional holdings), SC 13D (beneficial ownership), and other SEC forms."
+        "description": "Any other document type not specifically categorized above."
       }
     ],
     "mode": "FAST",
@@ -25,1173 +129,521 @@
       "max_pages": 5
     }
   },
-  "extract-10k": {
+  "extract-investment": {
     "product_type": "extract_v2",
     "configuration_id": null,
     "data_schema": {
-      "description": "Form 10-K is an annual report required by the SEC that provides a comprehensive\nsummary of a company's financial performance.",
+      "description": "Schema for extracting investment due diligence information from documents (VDD/buyside DD, IMs, pitch decks, market research, transcripts). Follows strict anti-hallucination policy with source grounding and factual accuracy.",
       "properties": {
-        "company_name": {
-          "description": "The full legal name of the company filing the document",
-          "title": "Company Name",
-          "type": "string"
-        },
-        "ticker_symbol": {
-          "anyOf": [
-            {
-              "type": "string"
+        "document_metadata": {
+          "type": "object",
+          "description": "Metadata describing the source document itself including company name, document type, producer information, and version details.",
+          "properties": {
+            "company_name": {
+              "type": "string",
+              "description": "Name of the company being analysed in the document."
             },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The stock ticker symbol of the company. May not be present for all filings.",
-          "title": "Ticker Symbol"
-        },
-        "cik": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Central Index Key - the unique identifier assigned by the SEC to the company",
-          "title": "Cik"
-        },
-        "filing_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The date the document was filed with the SEC (format: YYYY-MM-DD)",
-          "title": "Filing Date"
-        },
-        "fiscal_year_end": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year end date for the company (format: YYYY-MM-DD)",
-          "title": "Fiscal Year End"
-        },
-        "sic_code": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Standard Industrial Classification code for the company's industry",
-          "title": "Sic Code"
-        },
-        "document_type": {
-          "default": "10-K",
-          "description": "Should always be '10-K'",
-          "title": "Document Type",
-          "type": "string"
-        },
-        "fiscal_year": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year covered by this annual report (e.g., 2023)",
-          "title": "Fiscal Year"
-        },
-        "business_description": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "A 2-3 sentence summary of the company's business and operations",
-          "title": "Business Description"
-        },
-        "financial_metrics": {
-          "anyOf": [
-            {
-              "description": "Key financial metrics extracted from statements",
-              "properties": {
-                "total_revenue": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total revenue/sales for the period. Include currency and amount (e.g., '$1.2B USD')",
-                  "title": "Total Revenue"
+            "document_type": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "commercial_dd", "tech_it_dd", "financial_dd", "operations_dd",
+                    "legal_dd", "regulatory_dd", "esg_dd", "hr_people_dd",
+                    "tax_dd", "insurance_dd", "environmental_dd",
+                    "investment_memorandum", "information_memorandum_teaser",
+                    "management_presentation", "pitch_deck", "financial_statement",
+                    "annual_report", "quarterly_report", "internal_document",
+                    "board_pack", "analyst_report", "market_research_report",
+                    "broker_research", "expert_call_transcript", "management_call_transcript",
+                    "customer_call_transcript", "earnings_call_transcript",
+                    "other_transcript", "not_known", "other"
+                  ]
                 },
-                "net_income": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Net income/profit for the period. Include currency and amount",
-                  "title": "Net Income"
-                },
-                "total_assets": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total assets as of the balance sheet date. Include currency and amount",
-                  "title": "Total Assets"
-                },
-                "total_liabilities": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total liabilities as of the balance sheet date. Include currency and amount",
-                  "title": "Total Liabilities"
-                },
-                "stockholders_equity": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total stockholders' equity. Include currency and amount",
-                  "title": "Stockholders Equity"
-                },
-                "cash_and_equivalents": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Cash and cash equivalents. Include currency and amount",
-                  "title": "Cash And Equivalents"
-                },
-                "earnings_per_share": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Earnings per share (EPS) for the period",
-                  "title": "Earnings Per Share"
-                }
-              },
-              "title": "FinancialMetrics",
-              "type": "object"
+                {"type": "null"}
+              ],
+              "description": "Type of document being processed."
             },
-            {
-              "type": "null"
+            "document_producer": {
+              "anyOf": [{"type": "string"}, {"type": "null"}],
+              "description": "Name of the firm or team that produced the document."
+            },
+            "producer_type": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "investment_bank", "consulting_firm", "accounting_firm", "law_firm",
+                    "private_equity_firm", "venture_capital_firm", "hedge_fund", "company_internal",
+                    "research_firm", "brokerage_firm", "expert_network", "other", "not_known"
+                  ]
+                },
+                {"type": "null"}
+              ],
+              "description": "Category of document producer."
+            },
+            "dd_side": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["vendor", "buyside", "joint_vendor_buyside", "not_applicable", "not_known"]
+                },
+                {"type": "null"}
+              ],
+              "description": "For DD documents: whether vendor or buyside."
             }
-          ],
-          "default": null,
-          "description": "Key financial metrics from the annual statements"
+          }
         },
-        "risk_factors": {
-          "anyOf": [
-            {
-              "items": {
-                "description": "Individual risk factor identified in the filing",
-                "properties": {
-                  "category": {
-                    "description": "Category of risk (e.g., 'Market Risk', 'Operational Risk', 'Legal Risk')",
-                    "title": "Category",
-                    "type": "string"
-                  },
-                  "description": {
-                    "description": "Brief description of the specific risk",
-                    "title": "Description",
-                    "type": "string"
+        "company_overview": {
+          "type": "object",
+          "description": "Company information including business description, management team, ownership structure, and company fundamentals.",
+          "properties": {
+            "business_description": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {"type": "string"},
+                    "quotes": {"type": "array", "items": {"type": "string"}},
+                    "attribution": {"type": "string"}
                   }
                 },
-                "required": [
-                  "category",
-                  "description"
-                ],
-                "title": "RiskFactor",
-                "type": "object"
-              },
-              "type": "array"
+                {"type": "null"}
+              ],
+              "description": "Description of the company's business model, products/services, and operations."
             },
-            {
-              "type": "null"
+            "management_team": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "key_executives": {"type": "array", "items": {"type": "object"}},
+                    "board_composition": {"type": "array", "items": {"type": "object"}},
+                    "management_assessment": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Management team information and assessment."
             }
-          ],
-          "default": null,
-          "description": "List of material risk factors disclosed in the filing. Extract 3-5 most significant risks.",
-          "title": "Risk Factors"
+          }
         },
-        "management_discussion_summary": {
+        "market_analysis": {
+          "type": "object",
+          "description": "Market analysis including TAM/SAM/SOM, competitive positioning, market trends, and market dynamics.",
+          "properties": {
+            "market_size": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "tam": {"type": "object"},
+                    "sam": {"type": "object"},
+                    "som": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Total Addressable Market, Serviceable Addressable Market, Serviceable Obtainable Market."
+            },
+            "competitive_positioning": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "competitive_landscape": {"type": "array"},
+                    "market_share": {"type": "object"},
+                    "competitive_advantages": {"type": "array"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Competitive position and market share analysis."
+            }
+          }
+        },
+        "company_analysis": {
+          "type": "object",
+          "description": "Company analysis including business model, competitive moat, customer base, unit economics, and operational analysis.",
+          "properties": {
+            "business_model": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "revenue_model": {"type": "object"},
+                    "value_proposition": {"type": "object"},
+                    "go_to_market_strategy": {"type": "array"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Business model analysis and revenue generation approach."
+            },
+            "competitive_moat": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "moat_components": {"type": "array"},
+                    "sustainability_assessment": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Competitive moat analysis and sustainability."
+            }
+          }
+        },
+        "financial_profile": {
+          "type": "object",
+          "description": "Financial profile including financial statements, revenue mix, margins, working capital, and financial performance.",
+          "properties": {
+            "financial_statements": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "balance_sheet": {"type": "object"},
+                    "income_statement": {"type": "object"},
+                    "cash_flow_statement": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Historical financial statements and key line items."
+            },
+            "revenue_mix": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "by_product": {"type": "array"},
+                    "by_geography": {"type": "array"},
+                    "by_customer_segment": {"type": "array"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Revenue breakdown by product, geography, and customer segment."
+            },
+            "profitability_metrics": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "gross_margin": {"type": "object"},
+                    "operating_margin": {"type": "object"},
+                    "ebitda_margin": {"type": "object"},
+                    "net_margin": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Key profitability metrics and trends."
+            }
+          }
+        },
+        "document_stated_upsides_and_growth_signals": {
+          "type": "object",
+          "description": "Document-stated upsides and growth signals including growth drivers, opportunities, and positive factors.",
+          "properties": {
+            "growth_drivers": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Key drivers of business growth and expansion opportunities."
+            },
+            "market_opportunities": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Market opportunities and expansion potential."
+            }
+          }
+        },
+        "document_stated_risks": {
+          "type": "object",
+          "description": "Document-stated risks including business, financial, operational, regulatory, and other risk factors.",
+          "properties": {
+            "business_risks": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Business-related risks and challenges."
+            },
+            "financial_risks": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Financial risks including liquidity, leverage, and market risks."
+            },
+            "regulatory_risks": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Regulatory and compliance risks."
+            }
+          }
+        },
+        "valuation_and_capital_structure_signals": {
+          "type": "object",
+          "description": "Valuation and capital structure analysis including valuation metrics, cap table, funding history, and capital structure.",
+          "properties": {
+            "valuation_metrics": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "enterprise_value": {"type": "object"},
+                    "equity_value": {"type": "object"},
+                    "multiples": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Valuation metrics and comparable analysis."
+            },
+            "capital_structure": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "debt_structure": {"type": "array"},
+                    "equity_structure": {"type": "array"},
+                    "funding_history": {"type": "array"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Capital structure and funding information."
+            }
+          }
+        },
+        "merger_considerations": {
           "anyOf": [
             {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "2-3 sentence summary of Management's Discussion and Analysis (MD&A) section",
-          "title": "Management Discussion Summary"
-        },
-        "legal_proceedings": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "List of significant legal proceedings or litigation mentioned",
-          "title": "Legal Proceedings"
-        },
-        "executive_officers": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Names and titles of key executive officers (CEO, CFO, etc.)",
-          "title": "Executive Officers"
-        },
-        "auditor_name": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Name of the independent registered public accounting firm",
-          "title": "Auditor Name"
-        },
-        "key_highlights": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "3-5 key highlights or notable items from the annual report",
-          "title": "Key Highlights"
-        }
-      },
-      "required": [
-        "company_name"
-      ],
-      "title": "Filing10K",
-      "type": "object"
-    },
-    "tier": "agentic",
-    "extraction_target": "per_doc",
-    "system_prompt": null,
-    "cite_sources": true,
-    "confidence_scores": true
-  },
-  "extract-10q": {
-    "product_type": "extract_v2",
-    "configuration_id": null,
-    "data_schema": {
-      "description": "Form 10-Q is a quarterly report that provides a continuing view of a company's\nfinancial position during the year.",
-      "properties": {
-        "company_name": {
-          "description": "The full legal name of the company filing the document",
-          "title": "Company Name",
-          "type": "string"
-        },
-        "ticker_symbol": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The stock ticker symbol of the company. May not be present for all filings.",
-          "title": "Ticker Symbol"
-        },
-        "cik": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Central Index Key - the unique identifier assigned by the SEC to the company",
-          "title": "Cik"
-        },
-        "filing_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The date the document was filed with the SEC (format: YYYY-MM-DD)",
-          "title": "Filing Date"
-        },
-        "fiscal_year_end": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year end date for the company (format: YYYY-MM-DD)",
-          "title": "Fiscal Year End"
-        },
-        "sic_code": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Standard Industrial Classification code for the company's industry",
-          "title": "Sic Code"
-        },
-        "document_type": {
-          "default": "10-Q",
-          "description": "Should always be '10-Q'",
-          "title": "Document Type",
-          "type": "string"
-        },
-        "fiscal_quarter": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal quarter covered (e.g., 'Q1 2024', 'Q2 2023')",
-          "title": "Fiscal Quarter"
-        },
-        "fiscal_year": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year for this quarter (e.g., 2024)",
-          "title": "Fiscal Year"
-        },
-        "period_end_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The end date of the quarterly period (format: YYYY-MM-DD)",
-          "title": "Period End Date"
-        },
-        "financial_metrics": {
-          "anyOf": [
-            {
-              "description": "Key financial metrics extracted from statements",
+              "type": "object",
+              "description": "Merger-specific considerations (conditional on deal type).",
               "properties": {
-                "total_revenue": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
+                "integration_risks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
                     }
-                  ],
-                  "default": null,
-                  "description": "Total revenue/sales for the period. Include currency and amount (e.g., '$1.2B USD')",
-                  "title": "Total Revenue"
+                  }
                 },
-                "net_income": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
+                "synergies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
                     }
-                  ],
-                  "default": null,
-                  "description": "Net income/profit for the period. Include currency and amount",
-                  "title": "Net Income"
-                },
-                "total_assets": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total assets as of the balance sheet date. Include currency and amount",
-                  "title": "Total Assets"
-                },
-                "total_liabilities": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total liabilities as of the balance sheet date. Include currency and amount",
-                  "title": "Total Liabilities"
-                },
-                "stockholders_equity": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total stockholders' equity. Include currency and amount",
-                  "title": "Stockholders Equity"
-                },
-                "cash_and_equivalents": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Cash and cash equivalents. Include currency and amount",
-                  "title": "Cash And Equivalents"
-                },
-                "earnings_per_share": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Earnings per share (EPS) for the period",
-                  "title": "Earnings Per Share"
+                  }
                 }
-              },
-              "title": "FinancialMetrics",
-              "type": "object"
+              }
             },
-            {
-              "type": "null"
-            }
+            {"type": "null"}
           ],
-          "default": null,
-          "description": "Key financial metrics from the quarterly statements"
+          "description": "Merger considerations (only when deal_type='merger')."
         },
-        "year_over_year_revenue_change": {
+        "carveout_considerations": {
           "anyOf": [
             {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Year-over-year revenue change percentage or description (e.g., 'up 15%')",
-          "title": "Year Over Year Revenue Change"
-        },
-        "quarter_over_quarter_revenue_change": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Quarter-over-quarter revenue change percentage or description",
-          "title": "Quarter Over Quarter Revenue Change"
-        },
-        "management_discussion_summary": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "2-3 sentence summary of Management's Discussion and Analysis for the quarter",
-          "title": "Management Discussion Summary"
-        },
-        "material_changes_to_risks": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Summary of any material changes to risk factors since the last 10-K",
-          "title": "Material Changes To Risks"
-        },
-        "legal_proceedings_updates": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Updates to legal proceedings or new litigation since last filing",
-          "title": "Legal Proceedings Updates"
-        },
-        "key_highlights": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "3-5 key highlights or notable items from the quarterly report",
-          "title": "Key Highlights"
-        }
-      },
-      "required": [
-        "company_name"
-      ],
-      "title": "Filing10Q",
-      "type": "object"
-    },
-    "tier": "agentic",
-    "extraction_target": "per_doc",
-    "system_prompt": null,
-    "cite_sources": true,
-    "confidence_scores": true
-  },
-  "extract-8k": {
-    "product_type": "extract_v2",
-    "configuration_id": null,
-    "data_schema": {
-      "description": "Form 8-K is a current report used to notify investors of significant events\nthat shareholders should know about.",
-      "properties": {
-        "company_name": {
-          "description": "The full legal name of the company filing the document",
-          "title": "Company Name",
-          "type": "string"
-        },
-        "ticker_symbol": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The stock ticker symbol of the company. May not be present for all filings.",
-          "title": "Ticker Symbol"
-        },
-        "cik": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Central Index Key - the unique identifier assigned by the SEC to the company",
-          "title": "Cik"
-        },
-        "filing_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The date the document was filed with the SEC (format: YYYY-MM-DD)",
-          "title": "Filing Date"
-        },
-        "fiscal_year_end": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year end date for the company (format: YYYY-MM-DD)",
-          "title": "Fiscal Year End"
-        },
-        "sic_code": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Standard Industrial Classification code for the company's industry",
-          "title": "Sic Code"
-        },
-        "document_type": {
-          "default": "8-K",
-          "description": "Should always be '8-K'",
-          "title": "Document Type",
-          "type": "string"
-        },
-        "event_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The date of the event being reported (format: YYYY-MM-DD)",
-          "title": "Event Date"
-        },
-        "event_type": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Type of event (e.g., 'Merger/Acquisition', 'Leadership Change', 'Earnings Release', 'Material Agreement')",
-          "title": "Event Type"
-        },
-        "item_numbers": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Item numbers from the 8-K form (e.g., ['1.01', '5.02']) indicating which sections are included",
-          "title": "Item Numbers"
-        },
-        "event_summary": {
-          "description": "2-4 sentence summary describing the material event being reported",
-          "title": "Event Summary",
-          "type": "string"
-        },
-        "event_details": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "More detailed description of the event and its implications",
-          "title": "Event Details"
-        },
-        "estimated_financial_impact": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Estimated financial impact of the event, if disclosed",
-          "title": "Estimated Financial Impact"
-        },
-        "related_parties": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Names of other companies, individuals, or entities involved in the event",
-          "title": "Related Parties"
-        },
-        "material_exhibits": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Description of significant exhibits filed with the 8-K (e.g., 'Press Release', 'Material Agreement')",
-          "title": "Material Exhibits"
-        },
-        "contains_forward_looking_statements": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Whether the filing contains forward-looking statements",
-          "title": "Contains Forward Looking Statements"
-        },
-        "investment_implications": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "1-2 sentence assessment of potential implications for investors",
-          "title": "Investment Implications"
-        }
-      },
-      "required": [
-        "company_name",
-        "event_summary"
-      ],
-      "title": "Filing8K",
-      "type": "object"
-    },
-    "tier": "agentic",
-    "extraction_target": "per_doc",
-    "system_prompt": null,
-    "cite_sources": true,
-    "confidence_scores": true
-  },
-  "extract-other": {
-    "product_type": "extract_v2",
-    "configuration_id": null,
-    "data_schema": {
-      "description": "Catch-all schema for other SEC filing types (e.g., S-1, DEF 14A, 13F, etc.)",
-      "properties": {
-        "company_name": {
-          "description": "The full legal name of the company filing the document",
-          "title": "Company Name",
-          "type": "string"
-        },
-        "ticker_symbol": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The stock ticker symbol of the company. May not be present for all filings.",
-          "title": "Ticker Symbol"
-        },
-        "cik": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Central Index Key - the unique identifier assigned by the SEC to the company",
-          "title": "Cik"
-        },
-        "filing_date": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The date the document was filed with the SEC (format: YYYY-MM-DD)",
-          "title": "Filing Date"
-        },
-        "fiscal_year_end": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The fiscal year end date for the company (format: YYYY-MM-DD)",
-          "title": "Fiscal Year End"
-        },
-        "sic_code": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Standard Industrial Classification code for the company's industry",
-          "title": "Sic Code"
-        },
-        "document_type": {
-          "description": "The type of SEC filing (e.g., 'S-1', 'DEF 14A', '13F', 'SC 13D')",
-          "title": "Document Type",
-          "type": "string"
-        },
-        "filing_purpose": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "The purpose of this filing type (e.g., 'IPO Registration', 'Proxy Statement', 'Insider Holdings')",
-          "title": "Filing Purpose"
-        },
-        "summary": {
-          "description": "3-4 sentence summary of the filing's key content and purpose",
-          "title": "Summary",
-          "type": "string"
-        },
-        "key_information": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "List of 3-7 key pieces of information from the filing",
-          "title": "Key Information"
-        },
-        "financial_data": {
-          "anyOf": [
-            {
-              "description": "Key financial metrics extracted from statements",
+              "type": "object",
+              "description": "Carveout-specific considerations (conditional on deal type).",
               "properties": {
-                "total_revenue": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
+                "standalone_operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
                     }
-                  ],
-                  "default": null,
-                  "description": "Total revenue/sales for the period. Include currency and amount (e.g., '$1.2B USD')",
-                  "title": "Total Revenue"
+                  }
                 },
-                "net_income": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
+                "service_agreements": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
                     }
-                  ],
-                  "default": null,
-                  "description": "Net income/profit for the period. Include currency and amount",
-                  "title": "Net Income"
-                },
-                "total_assets": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total assets as of the balance sheet date. Include currency and amount",
-                  "title": "Total Assets"
-                },
-                "total_liabilities": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total liabilities as of the balance sheet date. Include currency and amount",
-                  "title": "Total Liabilities"
-                },
-                "stockholders_equity": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Total stockholders' equity. Include currency and amount",
-                  "title": "Stockholders Equity"
-                },
-                "cash_and_equivalents": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Cash and cash equivalents. Include currency and amount",
-                  "title": "Cash And Equivalents"
-                },
-                "earnings_per_share": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "default": null,
-                  "description": "Earnings per share (EPS) for the period",
-                  "title": "Earnings Per Share"
+                  }
                 }
-              },
-              "title": "FinancialMetrics",
-              "type": "object"
+              }
             },
-            {
-              "type": "null"
-            }
+            {"type": "null"}
           ],
-          "default": null,
-          "description": "Any relevant financial metrics present in the filing"
+          "description": "Carveout considerations (only when deal_type='carve_out')."
         },
-        "material_events": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+        "technology_and_it": {
+          "type": "object",
+          "description": "Technology and IT analysis including technology stack, IT infrastructure, cybersecurity, and technical capabilities.",
+          "properties": {
+            "technology_stack": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Technology stack and technical infrastructure."
             },
-            {
-              "type": "null"
+            "cybersecurity_posture": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "security_measures": {"type": "array"},
+                    "vulnerabilities": {"type": "array"},
+                    "compliance_status": {"type": "object"}
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Cybersecurity posture and risk assessment."
             }
-          ],
-          "default": null,
-          "description": "List of any material events or transactions described",
-          "title": "Material Events"
+          }
         },
-        "parties_involved": {
-          "anyOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+        "esg": {
+          "type": "object",
+          "description": "Environmental, Social, and Governance analysis including ESG factors, sustainability practices, and ESG risks/opportunities.",
+          "properties": {
+            "environmental_factors": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Environmental factors and sustainability practices."
             },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Other parties mentioned (companies, executives, investors, etc.)",
-          "title": "Parties Involved"
-        },
-        "investment_relevance": {
-          "anyOf": [
-            {
-              "type": "string"
+            "social_factors": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Social factors and impact analysis."
             },
-            {
-              "type": "null"
+            "governance_factors": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {"type": "string"},
+                      "quotes": {"type": "array", "items": {"type": "string"}},
+                      "attribution": {"type": "string"}
+                    }
+                  }
+                },
+                {"type": "null"}
+              ],
+              "description": "Governance structure and practices."
             }
-          ],
-          "default": null,
-          "description": "Brief note on why this filing might be relevant for investment analysis",
-          "title": "Investment Relevance"
+          }
         }
       },
-      "required": [
-        "company_name",
-        "document_type",
-        "summary"
-      ],
-      "title": "FilingOther",
+      "required": ["document_metadata"],
       "type": "object"
     },
     "tier": "agentic",
     "extraction_target": "per_doc",
-    "system_prompt": null,
+    "system_prompt": "Extract investment due diligence information following strict anti-hallucination policy: 1) Extract only what the document STATES - do not assess or score. 2) Source-ground most value-bearing fields with {value, quotes, attribution} structure. 3) Use quotes format: '<verbatim quote ≤50 words> @ <location>'. 4) Attribution format: '<source_type>: <source_name>'. 5) Return null when not explicitly stated - never invent values. 6) Do not compute ratios or derived values - capture only stated figures. 7) For partial information, capture what is available rather than null. 8) Conditional sections apply based on deal_type and document_type.",
     "cite_sources": true,
     "confidence_scores": true
   },

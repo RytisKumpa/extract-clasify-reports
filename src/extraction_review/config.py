@@ -1,5 +1,5 @@
 """
-Configuration for the extraction review application.
+Configuration for the investment due diligence extraction application.
 
 Configuration is loaded from configs/config.json via ResourceConfig.
 Each top-level key in config.json maps to an SDK product-configuration type:
@@ -26,323 +26,273 @@ logger = logging.getLogger(__name__)
 # The name of the collection to use for storing extracted data.
 EXTRACTED_DATA_COLLECTION: str = "sec-filing-extraction"
 
-# SEC Filing Classification Types
-SEC_FILING_TYPES = ["10-K", "10-Q", "8-K", "other"]
+# Investment Document Classification Types
+INVESTMENT_DOCUMENT_TYPES = [
+    "commercial_dd",
+    "tech_it_dd",
+    "financial_dd",
+    "operations_dd",
+    "legal_dd",
+    "regulatory_dd",
+    "esg_dd",
+    "hr_people_dd",
+    "tax_dd",
+    "insurance_dd",
+    "environmental_dd",
+    "investment_memorandum",
+    "information_memorandum_teaser",
+    "management_presentation",
+    "pitch_deck",
+    "financial_statement",
+    "annual_report",
+    "quarterly_report",
+    "internal_document",
+    "board_pack",
+    "analyst_report",
+    "market_research_report",
+    "broker_research",
+    "expert_call_transcript",
+    "management_call_transcript",
+    "customer_call_transcript",
+    "earnings_call_transcript",
+    "other_transcript",
+    "not_known",
+    "other",
+]
 
 
-# Base class for common fields across all SEC filings
-class BaseSECFiling(BaseModel):
-    """Common fields present in all SEC filings"""
-
-    company_name: str = Field(
-        description="The full legal name of the company filing the document"
+# Source-grounded value structure for anti-hallucination
+class SourceGroundedValue(BaseModel):
+    """Value with source grounding including quotes and attribution."""
+    value: str = Field(description="The extracted value from the document")
+    quotes: list[str] = Field(
+        default=[],
+        description="Array of supporting quotes from the document, max 5. Format: '<verbatim quote ≤50 words> @ <location>'"
     )
-    ticker_symbol: str | None = Field(
+    attribution: str | None = Field(
         default=None,
-        description="The stock ticker symbol of the company. May not be present for all filings.",
-    )
-    cik: str | None = Field(
-        default=None,
-        description="Central Index Key - the unique identifier assigned by the SEC to the company",
-    )
-    filing_date: str | None = Field(
-        default=None,
-        description="The date the document was filed with the SEC (format: YYYY-MM-DD)",
-    )
-    fiscal_year_end: str | None = Field(
-        default=None,
-        description="The fiscal year end date for the company (format: YYYY-MM-DD)",
-    )
-    sic_code: str | None = Field(
-        default=None,
-        description="Standard Industrial Classification code for the company's industry",
+        description="Source attribution. Format: '<source_type>: <source_name>'. "
+        "source_type ∈ {company_management, company_financials_audited, company_financials_unaudited, "
+        "third_party_research, industry_expert_interview, public_filings, news_article, "
+        "regulatory_filing, document_author_analysis, not_specified, not_known}"
     )
 
 
-# Financial metrics that appear in multiple filing types
-class FinancialMetrics(BaseModel):
-    """Key financial metrics extracted from statements"""
-
-    total_revenue: str | None = Field(
-        default=None,
-        description="Total revenue/sales for the period. Include currency and amount (e.g., '$1.2B USD')",
-    )
-    net_income: str | None = Field(
-        default=None,
-        description="Net income/profit for the period. Include currency and amount",
-    )
-    total_assets: str | None = Field(
-        default=None,
-        description="Total assets as of the balance sheet date. Include currency and amount",
-    )
-    total_liabilities: str | None = Field(
-        default=None,
-        description="Total liabilities as of the balance sheet date. Include currency and amount",
-    )
-    stockholders_equity: str | None = Field(
-        default=None,
-        description="Total stockholders' equity. Include currency and amount",
-    )
-    cash_and_equivalents: str | None = Field(
-        default=None,
-        description="Cash and cash equivalents. Include currency and amount",
-    )
-    earnings_per_share: str | None = Field(
-        default=None, description="Earnings per share (EPS) for the period"
-    )
-
-
-# Risk factor for use in 10-K and 10-Q
-class RiskFactor(BaseModel):
-    """Individual risk factor identified in the filing"""
-
-    category: str = Field(
-        description="Category of risk (e.g., 'Market Risk', 'Operational Risk', 'Legal Risk')"
-    )
-    description: str = Field(description="Brief description of the specific risk")
-
-
-# 10-K: Annual Report
-class Filing10K(BaseSECFiling):
-    """
-    Form 10-K is an annual report required by the SEC that provides a comprehensive
-    summary of a company's financial performance.
-    """
-
-    document_type: str = Field(default="10-K", description="Should always be '10-K'")
-    fiscal_year: int | None = Field(
-        default=None,
-        description="The fiscal year covered by this annual report (e.g., 2023)",
-    )
-
-    # Business overview
-    business_description: str | None = Field(
-        default=None,
-        description="A 2-3 sentence summary of the company's business and operations",
-    )
-
-    # Financial data
-    financial_metrics: FinancialMetrics | None = Field(
-        default=None, description="Key financial metrics from the annual statements"
-    )
-
-    # Risk factors
-    risk_factors: list[RiskFactor] | None = Field(
-        default=None,
-        description="List of material risk factors disclosed in the filing. Extract 3-5 most significant risks.",
-    )
-
-    # Management discussion
-    management_discussion_summary: str | None = Field(
-        default=None,
-        description="2-3 sentence summary of Management's Discussion and Analysis (MD&A) section",
-    )
-
-    # Legal proceedings
-    legal_proceedings: list[str] | None = Field(
-        default=None,
-        description="List of significant legal proceedings or litigation mentioned",
-    )
-
-    # Executive officers
-    executive_officers: list[str] | None = Field(
-        default=None,
-        description="Names and titles of key executive officers (CEO, CFO, etc.)",
-    )
-
-    # Auditor information
-    auditor_name: str | None = Field(
-        default=None,
-        description="Name of the independent registered public accounting firm",
-    )
-
-    # Key insights
-    key_highlights: list[str] | None = Field(
-        default=None,
-        description="3-5 key highlights or notable items from the annual report",
-    )
-
-
-# 10-Q: Quarterly Report
-class Filing10Q(BaseSECFiling):
-    """
-    Form 10-Q is a quarterly report that provides a continuing view of a company's
-    financial position during the year.
-    """
-
-    document_type: str = Field(default="10-Q", description="Should always be '10-Q'")
-    fiscal_quarter: str | None = Field(
-        default=None,
-        description="The fiscal quarter covered (e.g., 'Q1 2024', 'Q2 2023')",
-    )
-    fiscal_year: int | None = Field(
-        default=None, description="The fiscal year for this quarter (e.g., 2024)"
-    )
-    period_end_date: str | None = Field(
-        default=None,
-        description="The end date of the quarterly period (format: YYYY-MM-DD)",
-    )
-
-    # Financial data
-    financial_metrics: FinancialMetrics | None = Field(
-        default=None, description="Key financial metrics from the quarterly statements"
-    )
-
-    # Comparison to prior periods
-    year_over_year_revenue_change: str | None = Field(
-        default=None,
-        description="Year-over-year revenue change percentage or description (e.g., 'up 15%')",
-    )
-    quarter_over_quarter_revenue_change: str | None = Field(
-        default=None,
-        description="Quarter-over-quarter revenue change percentage or description",
-    )
-
-    # Management discussion
-    management_discussion_summary: str | None = Field(
-        default=None,
-        description="2-3 sentence summary of Management's Discussion and Analysis for the quarter",
-    )
-
-    # Risk factors
-    material_changes_to_risks: str | None = Field(
-        default=None,
-        description="Summary of any material changes to risk factors since the last 10-K",
-    )
-
-    # Legal updates
-    legal_proceedings_updates: list[str] | None = Field(
-        default=None,
-        description="Updates to legal proceedings or new litigation since last filing",
-    )
-
-    # Key insights
-    key_highlights: list[str] | None = Field(
-        default=None,
-        description="3-5 key highlights or notable items from the quarterly report",
-    )
-
-
-# 8-K: Current Report
-class Filing8K(BaseSECFiling):
-    """
-    Form 8-K is a current report used to notify investors of significant events
-    that shareholders should know about.
-    """
-
-    document_type: str = Field(default="8-K", description="Should always be '8-K'")
-
-    # Event information
-    event_date: str | None = Field(
-        default=None,
-        description="The date of the event being reported (format: YYYY-MM-DD)",
-    )
-    event_type: str | None = Field(
-        default=None,
-        description="Type of event (e.g., 'Merger/Acquisition', 'Leadership Change', 'Earnings Release', 'Material Agreement')",
-    )
-    item_numbers: list[str] | None = Field(
-        default=None,
-        description="Item numbers from the 8-K form (e.g., ['1.01', '5.02']) indicating which sections are included",
-    )
-
-    # Event description
-    event_summary: str = Field(
-        description="2-4 sentence summary describing the material event being reported"
-    )
-    event_details: str | None = Field(
-        default=None,
-        description="More detailed description of the event and its implications",
-    )
-
-    # Financial impact
-    estimated_financial_impact: str | None = Field(
-        default=None,
-        description="Estimated financial impact of the event, if disclosed",
-    )
-
-    # Related parties
-    related_parties: list[str] | None = Field(
-        default=None,
-        description="Names of other companies, individuals, or entities involved in the event",
-    )
-
-    # Exhibits filed
-    material_exhibits: list[str] | None = Field(
-        default=None,
-        description="Description of significant exhibits filed with the 8-K (e.g., 'Press Release', 'Material Agreement')",
-    )
-
-    # Forward-looking statements
-    contains_forward_looking_statements: bool | None = Field(
-        default=None,
-        description="Whether the filing contains forward-looking statements",
-    )
-
-    # Key takeaways
-    investment_implications: str | None = Field(
-        default=None,
-        description="1-2 sentence assessment of potential implications for investors",
-    )
-
-
-# Other filings catch-all
-class FilingOther(BaseSECFiling):
-    """
-    Catch-all schema for other SEC filing types (e.g., S-1, DEF 14A, 13F, etc.)
-    """
-
+# Document Metadata section
+class DocumentMetadata(BaseModel):
+    """Metadata describing the source document itself."""
+    company_name: str = Field(description="Name of the company being analysed in the document")
     document_type: str = Field(
-        description="The type of SEC filing (e.g., 'S-1', 'DEF 14A', '13F', 'SC 13D')"
+        description="Type of document (e.g., commercial_dd, investment_memorandum, pitch_deck, etc.)"
     )
-
-    filing_purpose: str | None = Field(
+    document_producer: str | None = Field(
         default=None,
-        description="The purpose of this filing type (e.g., 'IPO Registration', 'Proxy Statement', 'Insider Holdings')",
+        description="Name of the firm or team that produced the document (e.g. 'PwC', 'Goldman Sachs', 'in-house strategy team')"
     )
-
-    summary: str = Field(
-        description="3-4 sentence summary of the filing's key content and purpose"
-    )
-
-    key_information: list[str] | None = Field(
+    producer_type: str | None = Field(
         default=None,
-        description="List of 3-7 key pieces of information from the filing",
+        description="Category of document producer (e.g., investment_bank, consulting_firm, company_internal, etc.)"
     )
-
-    financial_data: FinancialMetrics | None = Field(
-        default=None, description="Any relevant financial metrics present in the filing"
-    )
-
-    material_events: list[str] | None = Field(
+    dd_side: str | None = Field(
         default=None,
-        description="List of any material events or transactions described",
+        description="For DD documents only: whether vendor or buyside"
     )
 
-    parties_involved: list[str] | None = Field(
+
+# Company Overview section
+class CompanyOverview(BaseModel):
+    """Company information including business description and management team."""
+    business_description: SourceGroundedValue | None = Field(
         default=None,
-        description="Other parties mentioned (companies, executives, investors, etc.)",
+        description="Description of the company's business model, products/services, and operations"
     )
-
-    investment_relevance: str | None = Field(
+    management_team: dict | None = Field(
         default=None,
-        description="Brief note on why this filing might be relevant for investment analysis",
+        description="Management team information including key executives, board composition, and assessment"
     )
 
 
-# Default schema for backward compatibility - now uses 10-K as the base
-class ExtractionSchema(Filing10K):
-    """Default extraction schema - uses 10-K structure for backward compatibility"""
+# Market Analysis section
+class MarketAnalysis(BaseModel):
+    """Market analysis including TAM/SAM/SOM and competitive positioning."""
+    market_size: dict | None = Field(
+        default=None,
+        description="Total Addressable Market, Serviceable Addressable Market, Serviceable Obtainable Market"
+    )
+    competitive_positioning: dict | None = Field(
+        default=None,
+        description="Competitive position, market share, and competitive advantages"
+    )
 
+
+# Company Analysis section
+class CompanyAnalysis(BaseModel):
+    """Company analysis including business model and competitive moat."""
+    business_model: dict | None = Field(
+        default=None,
+        description="Business model, revenue model, value proposition, and go-to-market strategy"
+    )
+    competitive_moat: dict | None = Field(
+        default=None,
+        description="Competitive moat components and sustainability assessment"
+    )
+
+
+# Financial Profile section
+class FinancialProfile(BaseModel):
+    """Financial profile including statements, revenue mix, and profitability."""
+    financial_statements: dict | None = Field(
+        default=None,
+        description="Historical financial statements including balance sheet, income statement, and cash flow"
+    )
+    revenue_mix: dict | None = Field(
+        default=None,
+        description="Revenue breakdown by product, geography, and customer segment"
+    )
+    profitability_metrics: dict | None = Field(
+        default=None,
+        description="Key profitability metrics including gross margin, operating margin, EBITDA margin, net margin"
+    )
+
+
+# Upsides and Growth Signals section
+class UpsidesAndGrowthSignals(BaseModel):
+    """Document-stated upsides and growth signals."""
+    growth_drivers: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Key drivers of business growth and expansion opportunities"
+    )
+    market_opportunities: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Market opportunities and expansion potential"
+    )
+
+
+# Risks section
+class Risks(BaseModel):
+    """Document-stated risks across business, financial, operational, and regulatory categories."""
+    business_risks: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Business-related risks and challenges"
+    )
+    financial_risks: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Financial risks including liquidity, leverage, and market risks"
+    )
+    regulatory_risks: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Regulatory and compliance risks"
+    )
+
+
+# Valuation and Capital Structure section
+class ValuationAndCapitalStructure(BaseModel):
+    """Valuation metrics and capital structure analysis."""
+    valuation_metrics: dict | None = Field(
+        default=None,
+        description="Valuation metrics including enterprise value, equity value, and multiples"
+    )
+    capital_structure: dict | None = Field(
+        default=None,
+        description="Capital structure including debt structure, equity structure, and funding history"
+    )
+
+
+# Merger Considerations section (conditional)
+class MergerConsiderations(BaseModel):
+    """Merger-specific considerations (conditional on deal type)."""
+    integration_risks: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Integration risks and challenges for merger scenarios"
+    )
+    synergies: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Expected synergies and value creation from merger"
+    )
+
+
+# Carveout Considerations section (conditional)
+class CarveoutConsiderations(BaseModel):
+    """Carveout-specific considerations (conditional on deal type)."""
+    standalone_operations: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Requirements and challenges for standalone operations"
+    )
+    service_agreements: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Transition service agreements and shared services"
+    )
+
+
+# Technology and IT section
+class TechnologyAndIT(BaseModel):
+    """Technology and IT analysis including stack and cybersecurity."""
+    technology_stack: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Technology stack and technical infrastructure"
+    )
+    cybersecurity_posture: dict | None = Field(
+        default=None,
+        description="Cybersecurity posture including security measures, vulnerabilities, and compliance"
+    )
+
+
+# ESG section
+class ESG(BaseModel):
+    """Environmental, Social, and Governance analysis."""
+    environmental_factors: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Environmental factors and sustainability practices"
+    )
+    social_factors: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Social factors and impact analysis"
+    )
+    governance_factors: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Governance structure and practices"
+    )
+
+
+# Main Investment Analysis Schema
+class InvestmentAnalysisSchema(BaseModel):
+    """
+    Comprehensive investment due diligence extraction schema.
+
+    Follows strict anti-hallucination policy with source grounding:
+    1. Extract only what the document STATES - do not assess or score
+    2. Source-ground most value-bearing fields with {value, quotes, attribution} structure
+    3. Use quotes format: '<verbatim quote ≤50 words> @ <location>'
+    4. Attribution format: '<source_type>: <source_name>'
+    5. Return null when not explicitly stated - never invent values
+    6. Do not compute ratios or derived values - capture only stated figures
+    7. For partial information, capture what is available rather than null
+    8. Conditional sections apply based on deal_type and document_type
+    """
+
+    document_metadata: DocumentMetadata = Field(description="Document metadata including company name and document type")
+    company_overview: CompanyOverview | None = Field(default=None, description="Company information and business overview")
+    market_analysis: MarketAnalysis | None = Field(default=None, description="Market analysis and competitive positioning")
+    company_analysis: CompanyAnalysis | None = Field(default=None, description="Company analysis including business model and competitive moat")
+    financial_profile: FinancialProfile | None = Field(default=None, description="Financial profile including statements and profitability")
+    document_stated_upsides_and_growth_signals: UpsidesAndGrowthSignals | None = Field(default=None, description="Document-stated growth drivers and opportunities")
+    document_stated_risks: Risks | None = Field(default=None, description="Document-stated risks across multiple categories")
+    valuation_and_capital_structure_signals: ValuationAndCapitalStructure | None = Field(default=None, description="Valuation metrics and capital structure analysis")
+    merger_considerations: MergerConsiderations | None = Field(default=None, description="Merger considerations (conditional on deal_type)")
+    carveout_considerations: CarveoutConsiderations | None = Field(default=None, description="Carveout considerations (conditional on deal_type)")
+    technology_and_it: TechnologyAndIT | None = Field(default=None, description="Technology and IT analysis")
+    esg: ESG | None = Field(default=None, description="Environmental, Social, and Governance analysis")
+
+
+# Default schema for backward compatibility - now uses investment analysis
+class ExtractionSchema(InvestmentAnalysisSchema):
+    """Default extraction schema - uses investment analysis structure for backward compatibility"""
     pass
 
 
-# Mapping of filing types to their schemas
-FILING_SCHEMAS = {
-    "10-K": Filing10K,
-    "10-Q": Filing10Q,
-    "8-K": Filing8K,
-    "other": FilingOther,
+# Mapping of document types to their schemas (unified approach for investment analysis)
+DOCUMENT_SCHEMAS = {
+    "investment_analysis": InvestmentAnalysisSchema,
 }
 
 
@@ -385,9 +335,6 @@ class Config(BaseModel):
     """Root configuration model for configs/config.json."""
 
     classify: ClassifyConfig
-    extract_10k: ExtractConfig = Field(alias="extract-10k")
-    extract_10q: ExtractConfig = Field(alias="extract-10q")
-    extract_8k: ExtractConfig = Field(alias="extract-8k")
-    extract_other: ExtractConfig = Field(alias="extract-other")
+    extract_investment: ExtractConfig = Field(alias="extract-investment")
     parse: ParseConfig
     split: SplitConfig

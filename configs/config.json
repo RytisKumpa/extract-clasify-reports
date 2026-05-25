@@ -230,16 +230,16 @@
         },
         "market_analysis": {
           "type": "object",
-          "description": "Market analysis including TAM/SAM/SOM, competitive positioning, market trends, and market dynamics.",
+          "description": "Market analysis including TAM/SAM/SOM and competitive positioning.",
           "properties": {
             "market_size": {
               "anyOf": [
                 {
                   "type": "object",
                   "properties": {
-                    "tam": {"type": "object"},
-                    "sam": {"type": "object"},
-                    "som": {"type": "object"}
+                    "tam": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "sam": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "som": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}
@@ -251,9 +251,41 @@
                 {
                   "type": "object",
                   "properties": {
-                    "competitive_landscape": {"type": "array"},
+                    "competitive_landscape": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "competitor_name": {"type": "string"},
+                              "market_position": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "market_share": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["competitor_name"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
                     "market_share": {"type": "object"},
-                    "competitive_advantages": {"type": "array"}
+                    "competitive_advantages": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "advantage_type": {"type": "string"},
+                              "description": {"type": "string"},
+                              "sustainability": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["advantage_type", "description"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    }
                   }
                 },
                 {"type": "null"}
@@ -264,16 +296,32 @@
         },
         "company_analysis": {
           "type": "object",
-          "description": "Company analysis including business model, competitive moat, customer base, unit economics, and operational analysis.",
+          "description": "Company analysis including business model and competitive moat.",
           "properties": {
             "business_model": {
               "anyOf": [
                 {
                   "type": "object",
                   "properties": {
-                    "revenue_model": {"type": "object"},
-                    "value_proposition": {"type": "object"},
-                    "go_to_market_strategy": {"type": "array"}
+                    "revenue_model": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "value_proposition": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "go_to_market_strategy": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "channel": {"type": "string"},
+                              "description": {"type": "string"},
+                              "effectiveness": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["channel", "description"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    }
                   }
                 },
                 {"type": "null"}
@@ -285,8 +333,24 @@
                 {
                   "type": "object",
                   "properties": {
-                    "moat_components": {"type": "array"},
-                    "sustainability_assessment": {"type": "object"}
+                    "moat_components": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "component_type": {"type": "string"},
+                              "description": {"type": "string"},
+                              "strength": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["component_type", "description"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "sustainability_assessment": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}
@@ -297,16 +361,16 @@
         },
         "financial_profile": {
           "type": "object",
-          "description": "Financial profile including financial statements, revenue mix, margins, working capital, and financial performance.",
+          "description": "Financial profile including financial statements, revenue mix, and profitability metrics.",
           "properties": {
             "financial_statements": {
               "anyOf": [
                 {
                   "type": "object",
                   "properties": {
-                    "balance_sheet": {"type": "object"},
-                    "income_statement": {"type": "object"},
-                    "cash_flow_statement": {"type": "object"}
+                    "balance_sheet": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "income_statement": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "cash_flow_statement": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}
@@ -318,9 +382,60 @@
                 {
                   "type": "object",
                   "properties": {
-                    "by_product": {"type": "array"},
-                    "by_geography": {"type": "array"},
-                    "by_customer_segment": {"type": "array"}
+                    "by_product": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "category": {"type": "string"},
+                              "amount": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "growth_rate": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "description": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["category"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "by_geography": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "category": {"type": "string"},
+                              "amount": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "growth_rate": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "description": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["category"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "by_customer_segment": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "category": {"type": "string"},
+                              "amount": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "growth_rate": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "description": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["category"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    }
                   }
                 },
                 {"type": "null"}
@@ -332,16 +447,18 @@
                 {
                   "type": "object",
                   "properties": {
-                    "gross_margin": {"type": "object"},
-                    "operating_margin": {"type": "object"},
-                    "ebitda_margin": {"type": "object"},
-                    "net_margin": {"type": "object"}
+                    "gross_margin": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "operating_margin": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "ebitda_margin": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "net_margin": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}
               ],
               "description": "Key profitability metrics and trends."
             }
+          }
+        },
           }
         },
         "document_stated_upsides_and_growth_signals": {
@@ -450,9 +567,9 @@
                 {
                   "type": "object",
                   "properties": {
-                    "enterprise_value": {"type": "object"},
-                    "equity_value": {"type": "object"},
-                    "multiples": {"type": "object"}
+                    "enterprise_value": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "equity_value": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+                    "multiples": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}
@@ -464,9 +581,62 @@
                 {
                   "type": "object",
                   "properties": {
-                    "debt_structure": {"type": "array"},
-                    "equity_structure": {"type": "array"},
-                    "funding_history": {"type": "array"}
+                    "debt_structure": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "debt_type": {"type": "string"},
+                              "amount": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "interest_rate": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "maturity": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "covenants": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["debt_type"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "equity_structure": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "shareholder_type": {"type": "string"},
+                              "ownership_pct": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "shares": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "rights": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["shareholder_type"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "funding_history": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "round_type": {"type": "string"},
+                              "amount": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "date": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "investors": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "valuation": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["round_type"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    }
                   }
                 },
                 {"type": "null"}
@@ -555,9 +725,10 @@
                     "type": "object",
                     "properties": {
                       "value": {"type": "string"},
-                      "quotes": {"type": "array", "items": {"type": "string"}},
-                      "attribution": {"type": "string"}
-                    }
+                      "quotes": {"anyOf": [{"type": "array", "items": {"type": "string"}}, {"type": "null"}]},
+                      "attribution": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                    },
+                    "required": ["value"]
                   }
                 },
                 {"type": "null"}
@@ -569,9 +740,42 @@
                 {
                   "type": "object",
                   "properties": {
-                    "security_measures": {"type": "array"},
-                    "vulnerabilities": {"type": "array"},
-                    "compliance_status": {"type": "object"}
+                    "security_measures": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "measure_type": {"type": "string"},
+                              "description": {"type": "string"},
+                              "implementation_status": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["measure_type", "description"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "vulnerabilities": {
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "vulnerability_type": {"type": "string"},
+                              "severity": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                              "description": {"type": "string"},
+                              "mitigation_status": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                            },
+                            "required": ["vulnerability_type", "description"]
+                          }
+                        },
+                        {"type": "null"}
+                      ]
+                    },
+                    "compliance_status": {"anyOf": [{"type": "object"}, {"type": "null"}]}
                   }
                 },
                 {"type": "null"}

@@ -99,6 +99,93 @@ class DocumentMetadata(BaseModel):
     )
 
 
+# Competitive landscape item
+class CompetitiveLandscapeItem(BaseModel):
+    """Individual competitor or market position item."""
+    competitor_name: str = Field(description="Name of competitor or market position")
+    market_position: str | None = Field(default=None, description="Market position or description")
+    market_share: str | None = Field(default=None, description="Market share percentage or description")
+
+
+# Competitive advantage item
+class CompetitiveAdvantageItem(BaseModel):
+    """Individual competitive advantage item."""
+    advantage_type: str = Field(description="Type of competitive advantage")
+    description: str = Field(description="Description of the competitive advantage")
+    sustainability: str | None = Field(default=None, description="Sustainability assessment")
+
+
+# Go-to-market strategy item
+class GoToMarketStrategyItem(BaseModel):
+    """Individual go-to-market strategy item."""
+    channel: str = Field(description="Sales or distribution channel")
+    description: str = Field(description="Description of the channel strategy")
+    effectiveness: str | None = Field(default=None, description="Channel effectiveness metrics")
+
+
+# Moat component item
+class MoatComponentItem(BaseModel):
+    """Individual competitive moat component."""
+    component_type: str = Field(description="Type of moat component")
+    description: str = Field(description="Description of the moat component")
+    strength: str | None = Field(default=None, description="Assessment of moat strength")
+
+
+# Revenue breakdown item
+class RevenueBreakdownItem(BaseModel):
+    """Individual revenue breakdown item."""
+    category: str = Field(description="Revenue category (product, geography, customer segment)")
+    amount: str | None = Field(default=None, description="Revenue amount or percentage")
+    growth_rate: str | None = Field(default=None, description="Growth rate for the category")
+    description: str | None = Field(default=None, description="Additional details about the category")
+
+
+# Debt structure item
+class DebtStructureItem(BaseModel):
+    """Individual debt structure item."""
+    debt_type: str = Field(description="Type of debt (senior, mezzanine, convertible, etc.)")
+    amount: str | None = Field(default=None, description="Debt amount")
+    interest_rate: str | None = Field(default=None, description="Interest rate or range")
+    maturity: str | None = Field(default=None, description="Maturity date or period")
+    covenants: str | None = Field(default=None, description="Key debt covenants or restrictions")
+
+
+# Equity structure item
+class EquityStructureItem(BaseModel):
+    """Individual equity structure item."""
+    shareholder_type: str = Field(description="Type of shareholder (founder, VC, PE, etc.)")
+    ownership_pct: str | None = Field(default=None, description="Ownership percentage")
+    shares: str | None = Field(default=None, description="Number of shares or details")
+    rights: str | None = Field(default=None, description="Special rights or preferences")
+
+
+# Funding history item
+class FundingHistoryItem(BaseModel):
+    """Individual funding history item."""
+    round_type: str = Field(description="Type of funding round (Series A, B, C, etc.)")
+    amount: str | None = Field(default=None, description="Funding amount")
+    date: str | None = Field(default=None, description="Funding date")
+    investors: str | None = Field(default=None, description="Key investors in the round")
+    valuation: str | None = Field(default=None, description="Post-money valuation")
+
+
+# Security measure item
+class SecurityMeasureItem(BaseModel):
+    """Individual cybersecurity measure."""
+    measure_type: str = Field(description="Type of security measure")
+    description: str = Field(description="Description of the security measure")
+    implementation_status: str | None = Field(default=None, description="Implementation status")
+
+
+# Vulnerability item
+class VulnerabilityItem(BaseModel):
+    """Individual cybersecurity vulnerability."""
+    vulnerability_type: str = Field(description="Type of vulnerability")
+    severity: str | None = Field(default=None, description="Severity assessment")
+    description: str = Field(description="Description of the vulnerability")
+    mitigation_status: str | None = Field(default=None, description="Current mitigation status")
+
+
 # Company Overview section
 class CompanyOverview(BaseModel):
     """Company information including business description and management team."""
@@ -121,7 +208,15 @@ class MarketAnalysis(BaseModel):
     )
     competitive_positioning: dict | None = Field(
         default=None,
-        description="Competitive position, market share, and competitive advantages"
+        description="Competitive position including landscape and advantages"
+    )
+    competitive_landscape: list[CompetitiveLandscapeItem] | None = Field(
+        default=None,
+        description="Array of competitors and market positions"
+    )
+    competitive_advantages: list[CompetitiveAdvantageItem] | None = Field(
+        default=None,
+        description="Array of competitive advantages"
     )
 
 
@@ -130,11 +225,19 @@ class CompanyAnalysis(BaseModel):
     """Company analysis including business model and competitive moat."""
     business_model: dict | None = Field(
         default=None,
-        description="Business model, revenue model, value proposition, and go-to-market strategy"
+        description="Business model, revenue model, value proposition"
+    )
+    go_to_market_strategy: list[GoToMarketStrategyItem] | None = Field(
+        default=None,
+        description="Array of go-to-market strategies and channels"
     )
     competitive_moat: dict | None = Field(
         default=None,
-        description="Competitive moat components and sustainability assessment"
+        description="Competitive moat and sustainability assessment"
+    )
+    moat_components: list[MoatComponentItem] | None = Field(
+        default=None,
+        description="Array of competitive moat components"
     )
 
 
@@ -147,7 +250,19 @@ class FinancialProfile(BaseModel):
     )
     revenue_mix: dict | None = Field(
         default=None,
-        description="Revenue breakdown by product, geography, and customer segment"
+        description="Revenue breakdown analysis"
+    )
+    by_product: list[RevenueBreakdownItem] | None = Field(
+        default=None,
+        description="Array of revenue breakdown by product"
+    )
+    by_geography: list[RevenueBreakdownItem] | None = Field(
+        default=None,
+        description="Array of revenue breakdown by geography"
+    )
+    by_customer_segment: list[RevenueBreakdownItem] | None = Field(
+        default=None,
+        description="Array of revenue breakdown by customer segment"
     )
     profitability_metrics: dict | None = Field(
         default=None,
@@ -194,7 +309,19 @@ class ValuationAndCapitalStructure(BaseModel):
     )
     capital_structure: dict | None = Field(
         default=None,
-        description="Capital structure including debt structure, equity structure, and funding history"
+        description="Capital structure including debt, equity, and funding history"
+    )
+    debt_structure: list[DebtStructureItem] | None = Field(
+        default=None,
+        description="Array of debt structure items"
+    )
+    equity_structure: list[EquityStructureItem] | None = Field(
+        default=None,
+        description="Array of equity structure items"
+    )
+    funding_history: list[FundingHistoryItem] | None = Field(
+        default=None,
+        description="Array of funding history items"
     )
 
 
@@ -234,6 +361,14 @@ class TechnologyAndIT(BaseModel):
     cybersecurity_posture: dict | None = Field(
         default=None,
         description="Cybersecurity posture including security measures, vulnerabilities, and compliance"
+    )
+    security_measures: list[SecurityMeasureItem] | None = Field(
+        default=None,
+        description="Array of cybersecurity measures"
+    )
+    vulnerabilities: list[VulnerabilityItem] | None = Field(
+        default=None,
+        description="Array of cybersecurity vulnerabilities"
     )
 
 

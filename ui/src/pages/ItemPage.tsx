@@ -24,35 +24,36 @@ export default function ItemPage() {
   const [highlight, setHighlight] = useState<Highlight | undefined>(undefined);
   const { metadata } = useMetadataContext();
 
-  // Use the hook to fetch item data (initially with a default schema)
+  // Use the hook to fetch item data (initially with investment analysis schema)
   const itemHookData = useItemData<any>({
-    // We'll update the schema based on classification once data loads
-    jsonSchema: modifyJsonSchema(metadata.schemas["10-K"] || {}, {}),
+    // Use investment analysis schema as default
+    jsonSchema: modifyJsonSchema(metadata.schemas["investment_analysis"] || {}, {}),
     itemId: itemId as string,
     isMock: false,
   });
 
-  // Determine the correct schema based on classification
+  // Determine the correct schema based on document type classification
   const classificationData = itemHookData.item?.data as
     | ExtractedData<any>
     | undefined;
-  const classification = (
-    (classificationData?.metadata?.classification as string | undefined) ||
-    "10-K"
-  ).toUpperCase();
-  const correctSchema =
-    metadata.schemas[classification] || metadata.schemas["10-K"];
+  const documentType = (
+    (classificationData?.metadata?.document_type as string | undefined) ||
+    "not_known"
+  ).replace(/_/g, " ").toUpperCase(); // Convert "commercial_dd" to "COMMERCIAL DD"
 
-  // Update the schema in itemHookData if classification is available
+  // For investment analysis, we use a single comprehensive schema
+  const correctSchema = metadata.schemas["investment_analysis"];
+
+  // Update the schema in itemHookData if document type is available
   const [schemaKey, setSchemaKey] = useState(0);
   const [appliedSchema, setAppliedSchema] = useState(correctSchema);
 
   useEffect(() => {
-    if (classification && metadata.schemas[classification]) {
-      setAppliedSchema(modifyJsonSchema(metadata.schemas[classification], {}));
+    if (documentType && metadata.schemas["investment_analysis"]) {
+      setAppliedSchema(modifyJsonSchema(metadata.schemas["investment_analysis"], {}));
       setSchemaKey(schemaKey + 1);
     }
-  }, [classification, metadata.schemas]);
+  }, [documentType, metadata.schemas]);
 
   const navigate = useNavigate();
 
@@ -91,7 +92,7 @@ export default function ItemPage() {
           startIcon={<Download className="h-4 w-4" />}
           label="Export JSON"
         />
-        <AcceptReject<any>
+        <AcceptReject<any>>
           itemData={itemHookData}
           onComplete={() => navigate("/")}
         />
@@ -109,7 +110,7 @@ export default function ItemPage() {
     error,
   } = itemHookData;
 
-  const classificationReasoning = (itemData?.data as ExtractedData<any>)
+  const documentTypeReasoning = (itemData?.data as ExtractedData<any>)
     ?.metadata?.classification_reasoning as string | undefined;
 
   if (isLoading) {
@@ -117,7 +118,7 @@ export default function ItemPage() {
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
           <Clock className="h-8 w-8 animate-spin mx-auto mb-2" />
-          <div className="text-sm text-gray-500">Loading item...</div>
+          <div className="text-sm text-gray-500">Loading investment data...</div>
         </div>
       </div>
     );
@@ -129,7 +130,7 @@ export default function ItemPage() {
         <div className="text-center">
           <XCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
           <div className="text-sm text-gray-500">
-            Error loading item: {error || "Item not found"}
+            Error loading investment data: {error || "Item not found"}
           </div>
         </div>
       </div>
@@ -155,15 +156,15 @@ export default function ItemPage() {
 
       <div className="flex-1 bg-white h-full overflow-y-auto">
         <div className="p-4 space-y-4">
-          {/* Classification Info */}
-          {classification && (
+          {/* Document Type Classification Info */}
+          {documentType && documentType !== "NOT KNOWN" && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
               <div className="text-sm font-semibold text-blue-900">
-                Document Type: {classification}
+                Document Type: {documentType}
               </div>
-              {classificationReasoning && (
+              {documentTypeReasoning && (
                 <div className="text-xs text-blue-600 mt-1">
-                  {classificationReasoning}
+                  {documentTypeReasoning}
                 </div>
               )}
             </div>
@@ -171,7 +172,7 @@ export default function ItemPage() {
           <ExtractedDataDisplay<any>
             key={schemaKey}
             extractedData={extractedData}
-            title="Extracted Data"
+            title="Investment Due Diligence Data"
             onChange={(updatedData) => {
               updateData(updatedData);
             }}

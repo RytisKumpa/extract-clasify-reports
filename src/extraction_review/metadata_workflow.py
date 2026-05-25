@@ -45,12 +45,21 @@ async def get_presentation_schema(
         ),
     ],
 ) -> dict[str, Any]:
+    """Get presentation schema for investment analysis.
+
+    Returns the investment analysis schema with proper structure for UI.
+    """
+    investment_schema = await _resolve_schema(extract_investment)
+
+    # For investment analysis, we use a single comprehensive schema
+    # but maintain the union structure for compatibility
     schemas = {
-        "investment_analysis": await _resolve_schema(extract_investment),
+        "investment_analysis": investment_schema,
     }
-    union = create_union_schema(schemas, discriminator_field=DISCRIMINATOR_FIELD)
+
+    # Don't create a union for single schema - use it directly
     return {
-        "json_schema": union,
+        "json_schema": investment_schema,
         "schemas": schemas,
         "discriminator_field": DISCRIMINATOR_FIELD,
     }

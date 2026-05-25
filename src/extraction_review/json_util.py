@@ -161,3 +161,17 @@ def create_union_schema(
         },
         "required": required_fields,
     }
+
+
+def get_data_from_agent_data(agent_data_item: dict[str, Any]) -> dict[str, Any]:
+    """Extract the actual data content from Agent Data item structure.
+
+    Handles both direct data structure and nested data.data structure.
+    """
+    if "data" in agent_data_item:
+        data = agent_data_item["data"]
+        # Check if data is nested (data.data) or direct
+        if isinstance(data, dict) and "data" in data:
+            return data["data"]
+        return data
+    return agent_data_item

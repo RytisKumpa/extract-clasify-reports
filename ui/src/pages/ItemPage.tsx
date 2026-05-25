@@ -36,8 +36,14 @@ export default function ItemPage() {
   const classificationData = itemHookData.item?.data as
     | ExtractedData<any>
     | undefined;
+
+  // Handle nested data structure from LlamaCloud Agent Data
+  const extractedContent = classificationData?.data as any;
+  const actualData = extractedContent?.data || extractedContent;
   const documentType = (
     (classificationData?.metadata?.document_type as string | undefined) ||
+    (extractedContent?.metadata?.document_type as string | undefined) ||
+    (actualData?.document_metadata?.document_type as string | undefined) ||
     "not_known"
   ).replace(/_/g, " ").toUpperCase(); // Convert "commercial_dd" to "COMMERCIAL DD"
 
@@ -58,10 +64,10 @@ export default function ItemPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const extractedData = itemHookData.item?.data as
-      | ExtractedData<unknown>
-      | undefined;
-    const fileName = extractedData?.file_name;
+    const classificationData = itemHookData.item?.data as ExtractedData<any> | undefined;
+    const extractedContent = classificationData?.data as any;
+    const actualData = extractedContent?.data || extractedContent;
+    const fileName = classificationData?.file_name || actualData?.file_name;
     if (fileName) {
       setBreadcrumbs([
         { label: APP_TITLE, href: "/" },
@@ -74,7 +80,8 @@ export default function ItemPage() {
 
     return () => {
       setBreadcrumbs([{ label: APP_TITLE, href: "/" }]);
-    };
+    });
+  }, [itemHookData.item?.data, setBreadcrumbs]);
   }, [itemHookData.item?.data, setBreadcrumbs]);
 
   useEffect(() => {
@@ -110,8 +117,11 @@ export default function ItemPage() {
     error,
   } = itemHookData;
 
-  const documentTypeReasoning = (itemData?.data as ExtractedData<any>)
-    ?.metadata?.classification_reasoning as string | undefined;
+  const documentTypeReasoning = (
+    (classificationData?.metadata?.classification_reasoning as string | undefined) ||
+    (extractedContent?.metadata?.classification_reasoning as string | undefined) ||
+    (actualData?.classification_reasoning as string | undefined)
+  );
 
   if (isLoading) {
     return (
@@ -137,8 +147,13 @@ export default function ItemPage() {
     );
   }
 
-  const extractedData = itemData.data as ExtractedData<any>;
-  const fileId = extractedData.file_id;
+  // Handle nested data structure from LlamaCloud Agent Data
+  const classificationData = itemData.data as ExtractedData<any>;
+  const extractedContent = classificationData?.data as any;
+  const actualData = extractedContent?.data || extractedContent;
+
+  const extractedData = actualData ? { ...classificationData, data: actualData } : classificationData;
+  const fileId = extractedData?.file_id || actualData?.file_id;
 
   return (
     <div className="flex h-full bg-gray-50">
@@ -174,7 +189,9 @@ export default function ItemPage() {
             extractedData={extractedData}
             title="Investment Due Diligence Data"
             onChange={(updatedData) => {
-              updateData(updatedData);
+              // Handle nested structure when updating data
+              const updatedContent = { data: { data: updatedData } };
+              updateData(updatedContent);
             }}
             onHoverField={(args) => {
               const highlights = convertBoundingBoxesToHighlights(

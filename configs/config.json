@@ -459,8 +459,6 @@
             }
           }
         },
-          }
-        },
         "document_stated_upsides_and_growth_signals": {
           "type": "object",
           "description": "Document-stated upsides and growth signals including growth drivers, opportunities, and positive factors.",

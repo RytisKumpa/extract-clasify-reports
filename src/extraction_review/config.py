@@ -206,16 +206,22 @@ class CompanyOverview(BaseModel):
 
 
 # Market Analysis section
-class MarketAnalysis(BaseModel):
-    """Market analysis including TAM/SAM/SOM and competitive positioning."""
-    market_size: dict | None = Field(
-        default=None,
-        description="Total Addressable Market, Serviceable Addressable Market, Serviceable Obtainable Market"
-    )
-    competitive_positioning: dict | None = Field(
-        default=None,
-        description="Competitive position including landscape and advantages"
-    )
+class MarketSize(BaseModel):
+    """Market size breakdown by TAM/SAM/SOM."""
+    tam: dict | None = Field(default=None, description="Total Addressable Market")
+    sam: dict | None = Field(default=None, description="Serviceable Addressable Market")
+    som: dict | None = Field(default=None, description="Serviceable Obtainable Market")
+
+    @field_validator("tam", "sam", "som", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+
+class CompetitivePositioning(BaseModel):
+    """Competitive position including market share, landscape, and advantages."""
+    market_share: dict | None = Field(default=None, description="Market share data")
     competitive_landscape: list[CompetitiveLandscapeItem] | None = Field(
         default=None,
         description="Array of competitors and market positions"
@@ -225,13 +231,55 @@ class MarketAnalysis(BaseModel):
         description="Array of competitive advantages"
     )
 
-    @field_validator("market_size", mode="before")
+    @field_validator("market_share", mode="before")
     @classmethod
     def convert_empty_dict_to_none(cls, v):
         """Convert empty dict to None for proper optional field handling."""
         return None if v == {} else v
 
-    @field_validator("competitive_positioning", mode="before")
+
+class MarketAnalysis(BaseModel):
+    """Market analysis including TAM/SAM/SOM and competitive positioning."""
+    market_size: MarketSize | None = Field(
+        default=None,
+        description="Total Addressable Market, Serviceable Addressable Market, Serviceable Obtainable Market"
+    )
+    competitive_positioning: CompetitivePositioning | None = Field(
+        default=None,
+        description="Competitive position including landscape and advantages"
+    )
+
+
+# Business Model section
+class BusinessModel(BaseModel):
+    """Business model analysis and revenue generation approach."""
+    revenue_model: dict | None = Field(default=None, description="Revenue model details")
+    value_proposition: dict | None = Field(default=None, description="Value proposition")
+    go_to_market_strategy: list[GoToMarketStrategyItem] | None = Field(
+        default=None,
+        description="Array of go-to-market strategies and channels"
+    )
+
+    @field_validator("revenue_model", "value_proposition", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+
+# Competitive Moat section
+class CompetitiveMoat(BaseModel):
+    """Competitive moat analysis and sustainability."""
+    moat_components: list[MoatComponentItem] | None = Field(
+        default=None,
+        description="Array of competitive moat components"
+    )
+    sustainability_assessment: dict | None = Field(
+        default=None,
+        description="Sustainability assessment"
+    )
+
+    @field_validator("sustainability_assessment", mode="before")
     @classmethod
     def convert_empty_dict_to_none(cls, v):
         """Convert empty dict to None for proper optional field handling."""
@@ -241,41 +289,33 @@ class MarketAnalysis(BaseModel):
 # Company Analysis section
 class CompanyAnalysis(BaseModel):
     """Company analysis including business model and competitive moat."""
-    business_model: dict | None = Field(
+    business_model: BusinessModel | None = Field(
         default=None,
-        description="Business model, revenue model, value proposition"
+        description="Business model analysis and revenue generation approach"
     )
-    go_to_market_strategy: list[GoToMarketStrategyItem] | None = Field(
+    competitive_moat: CompetitiveMoat | None = Field(
         default=None,
-        description="Array of go-to-market strategies and channels"
-    )
-    competitive_moat: dict | None = Field(
-        default=None,
-        description="Competitive moat and sustainability assessment"
-    )
-    moat_components: list[MoatComponentItem] | None = Field(
-        default=None,
-        description="Array of competitive moat components"
+        description="Competitive moat analysis and sustainability"
     )
 
-    @field_validator("business_model", "competitive_moat", mode="before")
+
+# Financial Statements section
+class FinancialStatements(BaseModel):
+    """Historical financial statements and key line items."""
+    balance_sheet: dict | None = Field(default=None, description="Balance sheet data")
+    income_statement: dict | None = Field(default=None, description="Income statement data")
+    cash_flow_statement: dict | None = Field(default=None, description="Cash flow statement data")
+
+    @field_validator("balance_sheet", "income_statement", "cash_flow_statement", mode="before")
     @classmethod
     def convert_empty_dict_to_none(cls, v):
         """Convert empty dict to None for proper optional field handling."""
         return None if v == {} else v
 
 
-# Financial Profile section
-class FinancialProfile(BaseModel):
-    """Financial profile including statements, revenue mix, and profitability."""
-    financial_statements: dict | None = Field(
-        default=None,
-        description="Historical financial statements including balance sheet, income statement, and cash flow"
-    )
-    revenue_mix: dict | None = Field(
-        default=None,
-        description="Revenue breakdown analysis"
-    )
+# Revenue Mix section
+class RevenueMix(BaseModel):
+    """Revenue breakdown by product, geography, and customer segment."""
     by_product: list[RevenueBreakdownItem] | None = Field(
         default=None,
         description="Array of revenue breakdown by product"
@@ -288,9 +328,37 @@ class FinancialProfile(BaseModel):
         default=None,
         description="Array of revenue breakdown by customer segment"
     )
-    profitability_metrics: dict | None = Field(
+
+
+# Profitability Metrics section
+class ProfitabilityMetrics(BaseModel):
+    """Key profitability metrics and trends."""
+    gross_margin: dict | None = Field(default=None, description="Gross margin")
+    operating_margin: dict | None = Field(default=None, description="Operating margin")
+    ebitda_margin: dict | None = Field(default=None, description="EBITDA margin")
+    net_margin: dict | None = Field(default=None, description="Net margin")
+
+    @field_validator("gross_margin", "operating_margin", "ebitda_margin", "net_margin", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+
+# Financial Profile section
+class FinancialProfile(BaseModel):
+    """Financial profile including statements, revenue mix, and profitability."""
+    financial_statements: FinancialStatements | None = Field(
         default=None,
-        description="Key profitability metrics including gross margin, operating margin, EBITDA margin, net margin"
+        description="Historical financial statements and key line items"
+    )
+    revenue_mix: RevenueMix | None = Field(
+        default=None,
+        description="Revenue breakdown by product, geography, and customer segment"
+    )
+    profitability_metrics: ProfitabilityMetrics | None = Field(
+        default=None,
+        description="Key profitability metrics and trends"
     )
 
 
@@ -324,17 +392,23 @@ class Risks(BaseModel):
     )
 
 
-# Valuation and Capital Structure section
-class ValuationAndCapitalStructure(BaseModel):
-    """Valuation metrics and capital structure analysis."""
-    valuation_metrics: dict | None = Field(
-        default=None,
-        description="Valuation metrics including enterprise value, equity value, and multiples"
-    )
-    capital_structure: dict | None = Field(
-        default=None,
-        description="Capital structure including debt, equity, and funding history"
-    )
+# Valuation Metrics section
+class ValuationMetrics(BaseModel):
+    """Valuation metrics and comparable analysis."""
+    enterprise_value: dict | None = Field(default=None, description="Enterprise value")
+    equity_value: dict | None = Field(default=None, description="Equity value")
+    multiples: dict | None = Field(default=None, description="Valuation multiples")
+
+    @field_validator("enterprise_value", "equity_value", "multiples", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+
+# Capital Structure section
+class CapitalStructure(BaseModel):
+    """Capital structure and funding information."""
     debt_structure: list[DebtStructureItem] | None = Field(
         default=None,
         description="Array of debt structure items"
@@ -348,17 +422,18 @@ class ValuationAndCapitalStructure(BaseModel):
         description="Array of funding history items"
     )
 
-    @field_validator("valuation_metrics", mode="before")
-    @classmethod
-    def convert_empty_dict_to_none(cls, v):
-        """Convert empty dict to None for proper optional field handling."""
-        return None if v == {} else v
 
-    @field_validator("capital_structure", mode="before")
-    @classmethod
-    def convert_empty_dict_to_none(cls, v):
-        """Convert empty dict to None for proper optional field handling."""
-        return None if v == {} else v
+# Valuation and Capital Structure section
+class ValuationAndCapitalStructure(BaseModel):
+    """Valuation metrics and capital structure analysis."""
+    valuation_metrics: ValuationMetrics | None = Field(
+        default=None,
+        description="Valuation metrics and comparable analysis"
+    )
+    capital_structure: CapitalStructure | None = Field(
+        default=None,
+        description="Capital structure and funding information"
+    )
 
 
 # Merger Considerations section (conditional)
@@ -387,17 +462,9 @@ class CarveoutConsiderations(BaseModel):
     )
 
 
-# Technology and IT section
-class TechnologyAndIT(BaseModel):
-    """Technology and IT analysis including stack and cybersecurity."""
-    technology_stack: list[SourceGroundedValue] | None = Field(
-        default=None,
-        description="Technology stack and technical infrastructure"
-    )
-    cybersecurity_posture: dict | None = Field(
-        default=None,
-        description="Cybersecurity posture including security measures, vulnerabilities, and compliance"
-    )
+# Cybersecurity Posture section
+class CybersecurityPosture(BaseModel):
+    """Cybersecurity posture and risk assessment."""
     security_measures: list[SecurityMeasureItem] | None = Field(
         default=None,
         description="Array of cybersecurity measures"
@@ -406,12 +473,26 @@ class TechnologyAndIT(BaseModel):
         default=None,
         description="Array of cybersecurity vulnerabilities"
     )
+    compliance_status: dict | None = Field(default=None, description="Compliance status")
 
-    @field_validator("cybersecurity_posture", mode="before")
+    @field_validator("compliance_status", mode="before")
     @classmethod
     def convert_empty_dict_to_none(cls, v):
         """Convert empty dict to None for proper optional field handling."""
         return None if v == {} else v
+
+
+# Technology and IT section
+class TechnologyAndIT(BaseModel):
+    """Technology and IT analysis including stack and cybersecurity."""
+    technology_stack: list[SourceGroundedValue] | None = Field(
+        default=None,
+        description="Technology stack and technical infrastructure"
+    )
+    cybersecurity_posture: CybersecurityPosture | None = Field(
+        default=None,
+        description="Cybersecurity posture and risk assessment"
+    )
 
 
 # ESG section

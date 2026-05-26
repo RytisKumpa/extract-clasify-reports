@@ -345,22 +345,51 @@ class ProcessFileWorkflow(Workflow):
 
         ctx.write_event_to_stream(extracted_event)
 
+        # Flatten the data structure for Agent Data storage
+        # ExtractedData has nested structure: data.data contains actual content
         extracted_data = extracted_event.data
         data_dict = extracted_data.model_dump()
-        if extracted_data.file_hash is not None:
+
+        # If data_dict has nested data.data structure, flatten it
+        if isinstance(data_dict, dict) and "data" in data_dict:
+            data_dict_content = data_dict["data"]
+            if isinstance(data_dict_content, dict) and "data" in data_dict_content:
+                # Flatten the structure: move content from data.data to top level
+                content = data_dict_content["data"]
+                metadata = data_dict_content.get("metadata", {})
+                field_metadata = data_dict_content.get("field_metadata", {})
+
+                # Create flattened structure
+                flattened_dict = {
+                    "data": content,
+                    "metadata": {
+                        **metadata,
+                        "document_type": document_type,
+                        "classification_confidence": state.classification_confidence,
+                        "classification_reasoning": state.classification_reasoning,
+                    },
+                    "file_name": state.filename,
+                    "file_id": state.file_id,
+                    "file_hash": state.file_hash,
+                    "field_metadata": field_metadata,
+                    "overall_confidence": data_dict_content.get("overall_confidence"),
+                }
+                data_dict = flattened_dict
+
+        if data_dict.get("file_hash") is not None:
             delete_result = await llama_cloud_client.beta.agent_data.delete_by_query(
                 deployment_name=agent_name or "_public",
                 collection=EXTRACTED_DATA_COLLECTION,
                 filter={
                     "file_hash": {
-                        "eq": extracted_data.file_hash,
+                        "eq": data_dict["file_hash"],
                     },
                 },
             )
             if delete_result.deleted_count > 0:
                 logger.info(
                     f"Removed {delete_result.deleted_count} existing record(s) "
-                    f"for file {extracted_data.file_name}"
+                    f"for file {data_dict.get('file_name', '')}"
                 )
         item = await llama_cloud_client.beta.agent_data.create(
             data=data_dict,
@@ -368,12 +397,12 @@ class ProcessFileWorkflow(Workflow):
             collection=EXTRACTED_DATA_COLLECTION,
         )
         logger.info(
-            f"Recorded investment due diligence data for file {extracted_data.file_name or ''}"
+            f"Recorded investment due diligence data for file {data_dict.get('file_name', '')}"
         )
         ctx.write_event_to_stream(
             Status(
                 level="info",
-                message=f"Recorded investment data for file {extracted_data.file_name or ''}",
+                message=f"Recorded investment data for file {data_dict.get('file_name', '')}",
             )
         )
         return StopEvent(result=item.id)

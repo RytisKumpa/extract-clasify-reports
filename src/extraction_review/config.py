@@ -15,7 +15,7 @@ from llama_cloud.types.classify_v2_parameters import ClassifyV2Parameters, Rule
 from llama_cloud.types.extract_v2_parameters import ExtractV2Parameters
 from llama_cloud.types.parse_v2_parameters import ParseV2Parameters
 from llama_cloud.types.split_v1_parameters import SplitV1Parameters
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from .json_util import create_union_schema as create_union_schema
 from .json_util import get_extraction_schema as get_extraction_schema
@@ -198,6 +198,12 @@ class CompanyOverview(BaseModel):
         description="Management team information including key executives, board composition, and assessment"
     )
 
+    @field_validator("management_team", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
 
 # Market Analysis section
 class MarketAnalysis(BaseModel):
@@ -219,6 +225,18 @@ class MarketAnalysis(BaseModel):
         description="Array of competitive advantages"
     )
 
+    @field_validator("market_size", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+    @field_validator("competitive_positioning", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
 
 # Company Analysis section
 class CompanyAnalysis(BaseModel):
@@ -239,6 +257,12 @@ class CompanyAnalysis(BaseModel):
         default=None,
         description="Array of competitive moat components"
     )
+
+    @field_validator("business_model", "competitive_moat", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
 
 
 # Financial Profile section
@@ -324,6 +348,18 @@ class ValuationAndCapitalStructure(BaseModel):
         description="Array of funding history items"
     )
 
+    @field_validator("valuation_metrics", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
+    @field_validator("capital_structure", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
+
 
 # Merger Considerations section (conditional)
 class MergerConsiderations(BaseModel):
@@ -370,6 +406,12 @@ class TechnologyAndIT(BaseModel):
         default=None,
         description="Array of cybersecurity vulnerabilities"
     )
+
+    @field_validator("cybersecurity_posture", mode="before")
+    @classmethod
+    def convert_empty_dict_to_none(cls, v):
+        """Convert empty dict to None for proper optional field handling."""
+        return None if v == {} else v
 
 
 # ESG section

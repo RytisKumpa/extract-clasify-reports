@@ -195,9 +195,11 @@
           }
         },
         "company_overview": {
-          "type": "object",
-          "description": "Company information including business description, management team, ownership structure, and company fundamentals.",
-          "properties": {
+          "anyOf": [
+            {
+              "type": "object",
+              "description": "Company information including business description, management team, ownership structure, and company fundamentals.",
+              "properties": {
             "business_description": {
               "anyOf": [
                 {
@@ -228,7 +230,13 @@
             }
           }
         },
-        "market_analysis": {
+        {"type": "null"}
+      ],
+      "description": "Company information including business description, management team, ownership structure, and company fundamentals."
+    },
+    "market_analysis": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Market analysis including TAM/SAM/SOM and competitive positioning.",
           "properties": {
@@ -294,7 +302,13 @@
             }
           }
         },
-        "company_analysis": {
+        {"type": "null"}
+      ],
+      "description": "Market analysis including TAM/SAM/SOM and competitive positioning."
+    },
+    "company_analysis": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Company analysis including business model and competitive moat.",
           "properties": {
@@ -359,7 +373,13 @@
             }
           }
         },
-        "financial_profile": {
+        {"type": "null"}
+      ],
+      "description": "Company analysis including business model and competitive moat."
+    },
+    "financial_profile": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Financial profile including financial statements, revenue mix, and profitability metrics.",
           "properties": {
@@ -459,7 +479,13 @@
             }
           }
         },
-        "document_stated_upsides_and_growth_signals": {
+        {"type": "null"}
+      ],
+      "description": "Financial profile including financial statements, revenue mix, and profitability metrics."
+    },
+    "document_stated_upsides_and_growth_signals": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Document-stated upsides and growth signals including growth drivers, opportunities, and positive factors.",
           "properties": {
@@ -499,7 +525,13 @@
             }
           }
         },
-        "document_stated_risks": {
+        {"type": "null"}
+      ],
+      "description": "Document-stated upsides and growth signals including growth drivers, opportunities, and positive factors."
+    },
+    "document_stated_risks": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Document-stated risks including business, financial, operational, regulatory, and other risk factors.",
           "properties": {
@@ -556,7 +588,13 @@
             }
           }
         },
-        "valuation_and_capital_structure_signals": {
+        {"type": "null"}
+      ],
+      "description": "Document-stated risks including business, financial, operational, regulatory, and other risk factors."
+    },
+    "valuation_and_capital_structure_signals": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Valuation and capital structure analysis including valuation metrics, cap table, funding history, and capital structure.",
           "properties": {
@@ -643,10 +681,11 @@
             }
           }
         },
-        "merger_considerations": {
-          "anyOf": [
-            {
-              "type": "object",
+        {"type": "null"}
+      ],
+      "description": "Valuation and capital structure analysis including valuation metrics, cap table, funding history, and capital structure."
+    },
+    "merger_considerations": {
               "description": "Merger-specific considerations (conditional on deal type).",
               "properties": {
                 "integration_risks": {
@@ -673,8 +712,8 @@
                 }
               }
             },
-            {"type": "null"}
-          ],
+            "type": "null"
+          ,
           "description": "Merger considerations (only when deal_type='merger')."
         },
         "carveout_considerations": {
@@ -710,8 +749,10 @@
             {"type": "null"}
           ],
           "description": "Carveout considerations (only when deal_type='carve_out')."
-        },
-        "technology_and_it": {
+    },
+    "technology_and_it": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Technology and IT analysis including technology stack, IT infrastructure, cybersecurity, and technical capabilities.",
           "properties": {
@@ -782,7 +823,13 @@
             }
           }
         },
-        "esg": {
+        {"type": "null"}
+      ],
+      "description": "Technology and IT analysis including technology stack, IT infrastructure, cybersecurity, and technical capabilities."
+    },
+    "esg": {
+      "anyOf": [
+        {
           "type": "object",
           "description": "Environmental, Social, and Governance analysis including ESG factors, sustainability practices, and ESG risks/opportunities.",
           "properties": {
@@ -838,9 +885,12 @@
               "description": "Governance structure and practices."
             }
           }
-        }
-      },
-      "required": ["document_metadata"],
+        },
+        {"type": "null"}
+      ],
+      "description": "Environmental, Social, and Governance analysis including ESG factors, sustainability practices, and ESG risks/opportunities."
+    },
+    "required": ["document_metadata"],
       "type": "object"
     },
     "tier": "agentic",

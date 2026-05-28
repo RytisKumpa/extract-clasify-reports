@@ -529,17 +529,17 @@ class InvestmentAnalysisSchema(BaseModel):
     """
 
     document_metadata: DocumentMetadata = Field(description="Document metadata including company name and document type")
-    #company_overview: CompanyOverview | None = Field(default=None, description="Company information and business overview")
+    company_overview: CompanyOverview | None = Field(default=None, description="Company information and business overview")
     market_analysis: MarketAnalysis | None = Field(default=None, description="Market analysis and competitive positioning")
-    #company_analysis: CompanyAnalysis | None = Field(default=None, description="Company analysis including business model and competitive moat")
+    company_analysis: CompanyAnalysis | None = Field(default=None, description="Company analysis including business model and competitive moat")
     financial_profile: FinancialProfile | None = Field(default=None, description="Financial profile including statements and profitability")
     document_stated_upsides_and_growth_signals: UpsidesAndGrowthSignals | None = Field(default=None, description="Document-stated growth drivers and opportunities")
     document_stated_risks: Risks | None = Field(default=None, description="Document-stated risks across multiple categories")
     valuation_and_capital_structure_signals: ValuationAndCapitalStructure | None = Field(default=None, description="Valuation metrics and capital structure analysis")
     merger_considerations: MergerConsiderations | None = Field(default=None, description="Merger considerations (conditional on deal_type)")
     carveout_considerations: CarveoutConsiderations | None = Field(default=None, description="Carveout considerations (conditional on deal_type)")
-    #technology_and_it: TechnologyAndIT | None = Field(default=None, description="Technology and IT analysis")
-    #esg: ESG | None = Field(default=None, description="Environmental, Social, and Governance analysis")
+    technology_and_it: TechnologyAndIT | None = Field(default=None, description="Technology and IT analysis")
+    esg: ESG | None = Field(default=None, description="Environmental, Social, and Governance analysis")
 
 # Default schema for backward compatibility - now uses investment analysis
 class ExtractionSchema(InvestmentAnalysisSchema):

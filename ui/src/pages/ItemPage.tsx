@@ -38,6 +38,7 @@ export default function ItemPage() {
       | undefined;
   const classification = (
       (classificationData?.metadata?.classification as string | undefined) ||
+      (classificationData?.metadata?.document_type as string | undefined) ||
       "10-K"
   ).toUpperCase();
   const correctSchema =

@@ -6,7 +6,7 @@ from workflows.events import StartEvent, StopEvent
 from workflows.resource import Resource, ResourceConfig
 
 from .clients import get_llama_cloud_client, project_id
-from .config import EXTRACTED_DATA_COLLECTION, ExtractConfig, create_union_schema
+from .config import EXTRACTED_DATA_COLLECTION, ExtractConfig, create_union_schema, INVESTMENT_DOCUMENT_TYPES
 
 DISCRIMINATOR_FIELD = "document_type"
 
@@ -51,13 +51,17 @@ async def get_presentation_schema(
     """
     investment_schema = await _resolve_schema(extract_investment)
 
-    # For investment analysis, we use a single comprehensive schema
-    # but maintain the union structure for compatibility
-    schemas = {
-        "investment_analysis": investment_schema,
-    }
+    # Get all supported document types - these should match classify rules
+    # All investment document types use the same investment_analysis schema
+    from extraction_review.config import INVESTMENT_DOCUMENT_TYPES
 
-    # Don't create a union for single schema - use it directly
+    # Create schemas mapping for all document types
+    schemas = {}
+    for doc_type in INVESTMENT_DOCUMENT_TYPES:
+        schemas[doc_type] = investment_schema
+        # Also add uppercase version for UI compatibility
+        schemas[doc_type.upper()] = investment_schema
+
     return {
         "json_schema": investment_schema,
         "schemas": schemas,

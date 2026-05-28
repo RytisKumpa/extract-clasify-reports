@@ -326,6 +326,39 @@
           "title": "CompanyOverview",
           "type": "object"
         },
+        "CompetitiveAdvantageItem": {
+          "properties": {
+            "advantage_type": {
+              "description": "Type of competitive advantage",
+              "title": "Advantage Type",
+              "type": "string"
+            },
+            "description": {
+              "description": "Description of the competitive advantage",
+              "title": "Description",
+              "type": "string"
+            },
+            "sustainability": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Sustainability assessment",
+              "title": "Sustainability"
+            }
+          },
+          "required": [
+            "advantage_type",
+            "description"
+          ],
+          "title": "CompetitiveAdvantageItem",
+          "type": "object"
+        },
         "CompetitiveLandscapeItem": {
           "properties": {
             "competitor_name": {
@@ -430,7 +463,9 @@
             "competitive_advantages": {
               "anyOf": [
                 {
-                  "items": {},
+                  "items": {
+                    "$ref": "#/$defs/CompetitiveAdvantageItem"
+                  },
                   "type": "array"
                 },
                 {
@@ -496,6 +531,7 @@
         "DebtStructureItem": {
           "properties": {
             "debt_type": {
+              "description": "Type of debt (senior, mezzanine, convertible, etc.)",
               "title": "Debt Type",
               "type": "string"
             },
@@ -664,6 +700,7 @@
         "EquityStructureItem": {
           "properties": {
             "shareholder_type": {
+              "description": "Type of shareholder (founder, VC, PE, etc.)",
               "title": "Shareholder Type",
               "type": "string"
             },
@@ -754,6 +791,7 @@
         "FundingHistoryItem": {
           "properties": {
             "round_type": {
+              "description": "Type of funding round (Series A, B, C, etc.)",
               "title": "Round Type",
               "type": "string"
             },
@@ -815,10 +853,12 @@
         "GoToMarketStrategyItem": {
           "properties": {
             "channel": {
+              "description": "Sales or distribution channel",
               "title": "Channel",
               "type": "string"
             },
             "description": {
+              "description": "Description of the channel strategy",
               "title": "Description",
               "type": "string"
             },
@@ -832,6 +872,7 @@
                 }
               ],
               "default": null,
+              "description": "Channel effectiveness metrics",
               "title": "Effectiveness"
             }
           },
@@ -954,10 +995,12 @@
         "MoatComponentItem": {
           "properties": {
             "component_type": {
+              "description": "Type of moat component",
               "title": "Component Type",
               "type": "string"
             },
             "description": {
+              "description": "Description of the moat component",
               "title": "Description",
               "type": "string"
             },
@@ -971,6 +1014,7 @@
                 }
               ],
               "default": null,
+              "description": "Assessment of moat strength",
               "title": "Strength"
             }
           },
@@ -1042,6 +1086,7 @@
         "RevenueBreakdownItem": {
           "properties": {
             "category": {
+              "description": "Revenue category (product, geography, customer segment)",
               "title": "Category",
               "type": "string"
             },
@@ -1193,10 +1238,12 @@
         "SecurityMeasureItem": {
           "properties": {
             "measure_type": {
+              "description": "Type of security measure",
               "title": "Measure Type",
               "type": "string"
             },
             "description": {
+              "description": "Description of the security measure",
               "title": "Description",
               "type": "string"
             },
@@ -1210,6 +1257,7 @@
                 }
               ],
               "default": null,
+              "description": "Implementation status",
               "title": "Implementation Status"
             }
           },
@@ -1398,6 +1446,7 @@
         "VulnerabilityItem": {
           "properties": {
             "vulnerability_type": {
+              "description": "Type of vulnerability",
               "title": "Vulnerability Type",
               "type": "string"
             },
@@ -1411,9 +1460,11 @@
                 }
               ],
               "default": null,
+              "description": "Severity assessment",
               "title": "Severity"
             },
             "description": {
+              "description": "Description of the vulnerability",
               "title": "Description",
               "type": "string"
             },
@@ -1427,6 +1478,7 @@
                 }
               ],
               "default": null,
+              "description": "Current mitigation status",
               "title": "Mitigation Status"
             }
           },

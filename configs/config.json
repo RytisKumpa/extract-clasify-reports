@@ -1623,7 +1623,7 @@
       "type": "object"
     },
     "tier": "agentic",
-    "extraction_target": "per_doc",
+    "extraction_target": "per_page",
     "system_prompt": "Extract investment due diligence information following strict anti-hallucination policy: 1) Extract only what the document STATES - do not assess or score. 2) Source-ground most value-bearing fields with {value, quotes, attribution} structure. 3) Use quotes format: '<verbatim quote \u226450 words> @ <location>'. 4) Attribution format: '<source_type>: <source_name>'. 5) Return null when not explicitly stated - never invent values. 6) Do not compute ratios or derived values - capture only stated figures. 7) For partial information, capture what is available rather than null. 8) Conditional sections apply based on deal_type and document_type.",
     "cite_sources": true,
     "confidence_scores": true

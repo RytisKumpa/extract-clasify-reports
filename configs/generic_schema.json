@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generic Investment Document Schema",
+  "description": "Fallback schema for documents that don't fit into specific categories or are of unknown type. Provides basic document metadata extraction.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "document_metadata": {
+      "type": "object",
+      "description": "Metadata describing the source document itself. Most fields here are pure metadata and do not require source quotes \u2014 they describe the document, not claims within it.",
+      "properties": {
+        "company_name": {
+          "description": "Name of the company being analysed in the document.",
+          "type": "string"
+        },
+        "document_type": {
+          "description": "Type of document. DD = Due Diligence. Each DD workstream has its own value; use dd_side to capture whether it is vendor or buyside.",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "commercial_dd",
+                "tech_it_dd",
+                "financial_dd",
+                "operations_dd",
+                "legal_dd",
+                "regulatory_dd",
+                "esg_dd",
+                "hr_people_dd",
+                "tax_dd",
+                "insurance_dd",
+                "environmental_dd",
+                "investment_memorandum",
+                "information_memorandum_teaser",
+                "management_presentation",
+                "pitch_deck",
+                "financial_statement",
+                "annual_report",
+                "quarterly_report",
+                "internal_document",
+                "board_pack",
+                "analyst_report",
+                "market_research_report",
+                "broker_research",
+                "expert_call_transcript",
+                "management_call_transcript",
+                "customer_call_transcript",
+                "earnings_call_transcript",
+                "other_transcript",
+                "not_known",
+                "other"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "document_type_other_description": {
+          "description": "If document_type is 'other', describe specifically. Otherwise null.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dd_side": {
+          "description": "For DD documents only: whether the report was commissioned by the seller (vendor) or the acquirer (buyside). Set to 'not_applicable' for non-DD documents.",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "vendor",
+                "buyside",
+                "joint_vendor_buyside",
+                "not_applicable",
+                "not_known"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "document_producer": {
+          "description": "Name of the firm or team that produced the document (e.g. 'PwC', 'Goldman Sachs', 'in-house strategy team').",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "producer_type": {
+          "description": "Category of document producer.",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "investment_bank",
+                "big4_accounting",
+                "strategy_consultant",
+                "specialist_advisor",
+                "law_firm",
+                "internal",
+                "research_provider",
+                "not_known",
+                "other"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "producer_type_other_description": {
+          "description": "If producer_type is 'other', describe specifically.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sellside_project_name": {
+          "description": "Project codename used in the sale process (e.g. 'Project Falcon').",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "document_version": {
+          "description": "Version of the document if specified (e.g. 'v1', 'v2 \u2014 updated March 2025', 'Draft 3').",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "document_date": {
+          "description": "Date the document was published or finalised (YYYY-MM-DD if available).",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deal_type": {
+          "description": "Type of transaction the document relates to.",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "series_a",
+                "series_b",
+                "series_c",
+                "series_d_plus",
+                "growth_equity",
+                "majority_buyout",
+                "minority_buyout",
+                "carve_out",
+                "public_to_private",
+                "merger",
+                "not_known",
+                "other"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deal_type_other_description": {
+          "description": "If deal_type is 'other', describe specifically.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deal_advisors_mentioned": {
+          "type": "array",
+          "description": "Advisors named in the document (sellside/buyside M&A, legal, VDD provider, QofE provider, etc.). Capture every advisor named, including the document's own producer if applicable.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "advisor_name": {
+                "description": "Firm name (e.g. 'Goldman Sachs', 'Kirkland & Ellis', 'PwC').",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "advisor_role": {
+                "description": "Role of the advisor in the deal.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "sellside_m_and_a",
+                      "buyside_m_and_a",
+                      "sellside_legal",
+                      "buyside_legal",
+                      "vdd_provider",
+                      "buyside_dd_provider",
+                      "qofe_provider",
+                      "tax_advisor",
+                      "process_manager",
+                      "debt_advisor",
+                      "not_known",
+                      "other"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "advisor_role_other_description": {
+                "description": "If advisor_role is 'other', describe.",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "mandate_description": {
+                "description": "Brief description of the advisor's mandate if specified.",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "company_name"
+      ]
+    }
+  },
+  "required": [
+    "document_metadata"
+  ]
+}

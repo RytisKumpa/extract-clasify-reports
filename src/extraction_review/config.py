@@ -20,6 +20,27 @@ from pydantic import BaseModel, Field, field_validator
 from .json_util import create_union_schema as create_union_schema
 from .json_util import get_extraction_schema as get_extraction_schema
 
+# Import Pydantic schemas for specific document types (will be used conditionally)
+try:
+    from .investment_doc_schemas import InvestmentDocumentSchema
+except ImportError:
+    InvestmentDocumentSchema = None
+
+try:
+    from .due_diligence_schemas import DueDiligenceSchema
+except ImportError:
+    DueDiligenceSchema = None  # Fallback if not available
+
+try:
+    from .financial_report_schemas import FinancialReportSchema
+except ImportError:
+    FinancialReportSchema = None  # Fallback if not available
+
+try:
+    from .generic_schemas import GenericDocumentSchema
+except ImportError:
+    GenericDocumentSchema = None  # Fallback if not available
+
 logger = logging.getLogger(__name__)
 
 
@@ -550,6 +571,67 @@ class ExtractionSchema(InvestmentAnalysisSchema):
 # Mapping of document types to their schemas (unified approach for investment analysis)
 DOCUMENT_SCHEMAS = {
     "investment_analysis": InvestmentAnalysisSchema,
+    "investment_doc": "InvestmentDocumentSchema",
+    "due_diligence": "DueDiligenceSchema",
+    "financial_report": "FinancialReportSchema",
+    "generic": "GenericDocumentSchema",
+}
+
+
+# Mapping of document types to schema categories for extraction
+DOCUMENT_TYPE_TO_SCHEMA = {
+    # Financial Reports
+    "financial_statement": "financial_report",
+    "annual_report": "financial_report",
+    "quarterly_report": "financial_report",
+    "earnings_call_transcript": "financial_report",
+
+    # Due Diligence Reports
+    "commercial_dd": "due_diligence",
+    "financial_dd": "due_diligence",
+    "legal_dd": "due_diligence",
+    "tech_it_dd": "due_diligence",
+    "operations_dd": "due_diligence",
+    "regulatory_dd": "due_diligence",
+    "esg_dd": "due_diligence",
+    "hr_people_dd": "due_diligence",
+    "tax_dd": "due_diligence",
+    "insurance_dd": "due_diligence",
+    "environmental_dd": "due_diligence",
+
+    # Investment Documents
+    "investment_memorandum": "investment_doc",
+    "information_memorandum_teaser": "investment_doc",
+    "management_presentation": "investment_doc",
+    "pitch_deck": "investment_doc",
+
+    # Research & Analysis
+    "analyst_report": "research",
+    "market_research_report": "research",
+    "broker_research": "research",
+    "internal_document": "research",
+    "board_pack": "research",
+
+    # Transcripts
+    "expert_call_transcript": "transcript",
+    "management_call_transcript": "transcript",
+    "customer_call_transcript": "transcript",
+    "other_transcript": "transcript",
+
+    # Generic/Fallback
+    "not_known": "generic",
+    "other": "generic",
+}
+
+
+# Schema file paths for each category
+SCHEMA_FILE_PATHS = {
+    "financial_report": "configs/financial_report_schema.json",
+    "due_diligence": "configs/due_diligence_schema.json",
+    "investment_doc": "configs/investment_doc_schema.json",
+    "research": "configs/research_schema.json",
+    "transcript": "configs/transcript_schema.json",
+    "generic": "configs/generic_schema.json",
 }
 
 

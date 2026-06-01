@@ -13,9 +13,11 @@ from workflows.resource import Resource, ResourceConfig
 
 from .clients import agent_name, get_llama_cloud_client, project_id
 from .config import (
+    DOCUMENT_TYPE_TO_SCHEMA,
     EXTRACTED_DATA_COLLECTION,
     ClassifyConfig,
     ExtractConfig,
+    SCHEMA_FILE_PATHS,
     get_extraction_schema,
 )
 
@@ -293,27 +295,156 @@ class ProcessFileWorkflow(Workflow):
             logger.info(
                 f"Extracted data: {json.dumps(job.model_dump(mode='json'), indent=2, default=str)}"
             )
-            if extract_config.configuration_id:
-                config_resp = await llama_cloud_client.configurations.retrieve(
-                    extract_config.configuration_id,
-                    project_id=project_id,
-                )
-                params = config_resp.parameters
-                if not isinstance(params, ExtractV2Parameters):
-                    raise ValueError(
-                        f"Configuration {extract_config.configuration_id} is not extract_v2"
-                    )
-                schema_class = get_extraction_schema(
-                    dict(params.data_schema),
-                    discriminator_field=DISCRIMINATOR_FIELD,
-                    discriminator_value=document_type,
-                )
+
+            # Select appropriate schema based on document type
+            schema_category = DOCUMENT_TYPE_TO_SCHEMA.get(document_type, "generic")
+
+            # Special handling for Pydantic models
+            if schema_category == "investment_doc":
+                try:
+                    from extraction_review.investment_doc_schemas import InvestmentDocumentSchema
+                    schema_json = InvestmentDocumentSchema.model_json_schema()
+                    logger.info(f"Using Pydantic model for investment_doc schema")
+                except ImportError:
+                    logger.warning("Could not import InvestmentDocumentSchema, falling back to default schema")
+                    schema_file_path = SCHEMA_FILE_PATHS.get(schema_category)
+                    if schema_file_path:
+                        from pathlib import Path
+                        schema_file = Path(schema_file_path)
+                        if schema_file.exists():
+                            with open(schema_file) as f:
+                                schema_json = json.load(f)
+                        else:
+                            schema_json = dict(extract_config.data_schema)
+                    else:
+                        schema_json = dict(extract_config.data_schema)
+
+            elif schema_category == "due_diligence":
+                try:
+                    from extraction_review.due_diligence_schemas import DueDiligenceSchema
+                    schema_json = DueDiligenceSchema.model_json_schema()
+                    logger.info(f"Using Pydantic model for due_diligence schema")
+                except ImportError:
+                    logger.warning("Could not import DueDiligenceSchema, falling back to default schema")
+                    schema_file_path = SCHEMA_FILE_PATHS.get(schema_category)
+                    if schema_file_path:
+                        from pathlib import Path
+                        schema_file = Path(schema_file_path)
+                        if schema_file.exists():
+                            with open(schema_file) as f:
+                                schema_json = json.load(f)
+                        else:
+                            schema_json = dict(extract_config.data_schema)
+                    else:
+                        schema_json = dict(extract_config.data_schema)
+
+            elif schema_category == "financial_report":
+                try:
+                    from extraction_review.financial_report_schemas import FinancialReportSchema
+                    schema_json = FinancialReportSchema.model_json_schema()
+                    logger.info(f"Using Pydantic model for financial_report schema")
+                except ImportError:
+                    logger.warning("Could not import FinancialReportSchema, falling back to default schema")
+                    schema_file_path = SCHEMA_FILE_PATHS.get(schema_category)
+                    if schema_file_path:
+                        from pathlib import Path
+                        schema_file = Path(schema_file_path)
+                        if schema_file.exists():
+                            with open(schema_file) as f:
+                                schema_json = json.load(f)
+                        else:
+                            schema_json = dict(extract_config.data_schema)
+                    else:
+                        schema_json = dict(extract_config.data_schema)
+
+            elif schema_category == "generic":
+                try:
+                    from extraction_review.generic_schemas import GenericDocumentSchema
+                    schema_json = GenericDocumentSchema.model_json_schema()
+                    logger.info(f"Using Pydantic model for generic schema")
+                except ImportError:
+                    logger.warning("Could not import GenericDocumentSchema, falling back to default schema")
+                    schema_file_path = SCHEMA_FILE_PATHS.get(schema_category)
+                    if schema_file_path:
+                        from pathlib import Path
+                        schema_file = Path(schema_file_path)
+                        if schema_file.exists():
+                            with open(schema_file) as f:
+                                schema_json = json.load(f)
+                        else:
+                            schema_json = dict(extract_config.data_schema)
+                    else:
+                        schema_json = dict(extract_config.data_schema)
             else:
-                schema_class = get_extraction_schema(
-                    dict(extract_config.data_schema),
-                    discriminator_field=DISCRIMINATOR_FIELD,
-                    discriminator_value=document_type,
-                )
+                schema_file_path = SCHEMA_FILE_PATHS.get(schema_category)
+
+                if schema_file_path:
+                    # Load schema from file
+                    from pathlib import Path
+
+                    schema_file = Path(schema_file_path)
+                    if schema_file.exists():
+                        with open(schema_file) as f:
+                            schema_json = json.load(f)
+                    else:
+                        logger.warning(
+                            f"Schema file not found: {schema_file_path}, using default schema"
+                        )
+                        if extract_config.configuration_id:
+                            config_resp = await llama_cloud_client.configurations.retrieve(
+                                extract_config.configuration_id,
+                                project_id=project_id,
+                            )
+                            params = config_resp.parameters
+                            if not isinstance(params, ExtractV2Parameters):
+                                raise ValueError(
+                                    f"Configuration {extract_config.configuration_id} is not extract_v2"
+                                )
+                            schema_json = dict(params.data_schema)
+                        else:
+                            schema_json = dict(extract_config.data_schema)
+                else:
+                    # Use default schema from config
+                    if extract_config.configuration_id:
+                        config_resp = await llama_cloud_client.configurations.retrieve(
+                            extract_config.configuration_id,
+                            project_id=project_id,
+                        )
+                        params = config_resp.parameters
+                        if not isinstance(params, ExtractV2Parameters):
+                            raise ValueError(
+                                f"Configuration {extract_config.configuration_id} is not extract_v2"
+                            )
+                        schema_json = dict(params.data_schema)
+                    else:
+                        schema_json = dict(extract_config.data_schema)
+
+            # Add discriminator field to schema
+            schema_class = get_extraction_schema(
+                schema_json,
+                discriminator_field=DISCRIMINATOR_FIELD,
+                discriminator_value=document_type,
+            )
+
+            # Debug: Check what format extract_result is in
+            extract_result = job.extract_result
+            logger.info(
+                f"Extract result type: {type(extract_result)}, "
+                f"is list: {isinstance(extract_result, list)}, "
+                f"length: {len(extract_result) if isinstance(extract_result, list) else 'N/A'}"
+            )
+
+            # Handle case where extract_result is a list
+            # We need to modify the job object since from_extract_job reads from it
+            if isinstance(extract_result, list):
+                if len(extract_result) >= 1:
+                    job.extract_result = extract_result[0]
+                    logger.info(
+                        f"Extracted first result from list (total: {len(extract_result)}) "
+                        f"for {document_type}"
+                    )
+                else:
+                    raise ValueError("Empty extraction result list returned")
 
             data = ExtractedData.from_extract_job(
                 job=job,

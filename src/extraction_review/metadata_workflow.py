@@ -1,4 +1,5 @@
 from typing import Annotated, Any
+import logging
 
 from llama_cloud.types.configuration_response import ExtractV2Parameters
 from workflows import Workflow, step
@@ -7,6 +8,8 @@ from workflows.resource import Resource, ResourceConfig
 
 from .clients import get_llama_cloud_client, project_id
 from .config import EXTRACTED_DATA_COLLECTION, ExtractConfig, create_union_schema, INVESTMENT_DOCUMENT_TYPES
+
+logger = logging.getLogger(__name__)
 
 DISCRIMINATOR_FIELD = "document_type"
 
@@ -45,25 +48,88 @@ async def get_presentation_schema(
         ),
     ],
 ) -> dict[str, Any]:
-    """Get presentation schema for investment analysis.
+    """Get presentation schema for all document categories.
 
-    Returns the investment analysis schema with proper structure for UI.
+    Returns a mapping of document types to their appropriate schemas for the UI.
     """
-    investment_schema = await _resolve_schema(extract_investment)
+    import json
+    from pathlib import Path
 
-    # Get all supported document types - these should match classify rules
-    # All investment document types use the same investment_analysis schema
-    from extraction_review.config import INVESTMENT_DOCUMENT_TYPES
+    from extraction_review.config import (
+        DOCUMENT_TYPE_TO_SCHEMA,
+        INVESTMENT_DOCUMENT_TYPES,
+        SCHEMA_FILE_PATHS,
+    )
 
-    # Create schemas mapping for all document types
+    # Load all category-specific schemas
+    category_schemas = {}
+    for category, schema_path in SCHEMA_FILE_PATHS.items():
+        # Special handling for Pydantic models
+        if category == "investment_doc":
+            try:
+                from extraction_review.investment_doc_schemas import InvestmentDocumentSchema
+                category_schemas[category] = InvestmentDocumentSchema.model_json_schema()
+                logger.info(f"Using Pydantic model for investment_doc schema")
+                continue
+            except ImportError:
+                logger.warning("Could not import InvestmentDocumentSchema, falling back to JSON")
+
+        if category == "due_diligence":
+            try:
+                from extraction_review.due_diligence_schemas import DueDiligenceSchema
+                category_schemas[category] = DueDiligenceSchema.model_json_schema()
+                logger.info(f"Using Pydantic model for due_diligence schema")
+                continue
+            except ImportError:
+                logger.warning("Could not import DueDiligenceSchema, falling back to JSON")
+
+        if category == "financial_report":
+            try:
+                from extraction_review.financial_report_schemas import FinancialReportSchema
+                category_schemas[category] = FinancialReportSchema.model_json_schema()
+                logger.info(f"Using Pydantic model for financial_report schema")
+                continue
+            except ImportError:
+                logger.warning("Could not import FinancialReportSchema, falling back to JSON")
+
+        if category == "generic":
+            try:
+                from extraction_review.generic_schemas import GenericDocumentSchema
+                category_schemas[category] = GenericDocumentSchema.model_json_schema()
+                logger.info(f"Using Pydantic model for generic schema")
+                continue
+            except ImportError:
+                logger.warning("Could not import GenericDocumentSchema, falling back to JSON")
+
+        schema_file = Path(schema_path)
+        if schema_file.exists():
+            with open(schema_file) as f:
+                category_schemas[category] = json.load(f)
+        else:
+            # Fallback to empty schema if file doesn't exist
+            category_schemas[category] = {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {},
+                "required": [],
+            }
+
+    # Map each document type to its category schema
     schemas = {}
     for doc_type in INVESTMENT_DOCUMENT_TYPES:
-        schemas[doc_type] = investment_schema
+        # Get the schema category for this document type
+        schema_category = DOCUMENT_TYPE_TO_SCHEMA.get(doc_type, "generic")
+        schema = category_schemas.get(schema_category, category_schemas["generic"])
+
+        schemas[doc_type] = schema
         # Also add uppercase version for UI compatibility
-        schemas[doc_type.upper()] = investment_schema
+        schemas[doc_type.upper()] = schema
+
+    # Use the generic schema as the default JSON schema
+    default_schema = category_schemas.get("generic", {})
 
     return {
-        "json_schema": investment_schema,
+        "json_schema": default_schema,
         "schemas": schemas,
         "discriminator_field": DISCRIMINATOR_FIELD,
     }

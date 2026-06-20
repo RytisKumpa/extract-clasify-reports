@@ -1631,7 +1631,7 @@
   "parse": {
     "product_type": "parse_v2",
     "configuration_id": null,
-    "tier": "agentic",
+    "tier": "agentic_plus",
     "version": "latest"
   },
   "split": {

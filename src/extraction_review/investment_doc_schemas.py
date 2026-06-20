@@ -122,7 +122,7 @@ class CompanyOverview(BaseModel):
         default=None,
         description="Key leadership team — CEO, CFO, Chairman, founders, board members, etc."
     )
-    business_description: Optional[str] = Field(
+    business_description: Optional[SourceGroundedValue] = Field(
         default=None,
         description="Description of the company's business model, products/services, and operations"
     )
@@ -291,11 +291,11 @@ class FinancialProfile(BaseModel):
 # Growth Signals section
 class UpsidesAndGrowthSignals(BaseModel):
     """Document-stated upsides and growth signals."""
-    growth_drivers: Optional[List[str]] = Field(
+    growth_drivers: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Key drivers of business growth and expansion opportunities"
     )
-    market_opportunities: Optional[List[str]] = Field(
+    market_opportunities: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Market opportunities and expansion potential"
     )
@@ -304,15 +304,15 @@ class UpsidesAndGrowthSignals(BaseModel):
 # Risks section
 class Risks(BaseModel):
     """Document-stated risks across business, financial, operational, and regulatory categories."""
-    business_risks: Optional[List[str]] = Field(
+    business_risks: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Business-related risks and challenges"
     )
-    financial_risks: Optional[List[str]] = Field(
+    financial_risks: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Financial risks including liquidity, leverage, and market risks"
     )
-    regulatory_risks: Optional[List[str]] = Field(
+    regulatory_risks: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Regulatory and compliance risks"
     )
@@ -383,11 +383,11 @@ class ValuationAndCapitalStructure(BaseModel):
 # Merger/Carveout Considerations sections
 class MergerConsiderations(BaseModel):
     """Merger-specific considerations (conditional on deal type)."""
-    integration_risks: Optional[List[str]] = Field(
+    integration_risks: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Integration risks and challenges for merger scenarios"
     )
-    synergies: Optional[List[str]] = Field(
+    synergies: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Expected synergies and value creation from merger"
     )
@@ -395,11 +395,11 @@ class MergerConsiderations(BaseModel):
 
 class CarveoutConsiderations(BaseModel):
     """Carveout-specific considerations (conditional on deal type)."""
-    standalone_operations: Optional[List[str]] = Field(
+    standalone_operations: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Requirements and challenges for standalone operations"
     )
-    service_agreements: Optional[List[str]] = Field(
+    service_agreements: Optional[List[SourceGroundedValue]] = Field(
         default=None,
         description="Transition service agreements and shared services"
     )

@@ -210,11 +210,11 @@ class VulnerabilityItem(BaseModel):
 # Company Overview section
 class CompanyOverview(BaseModel):
     """Company information including business description and management team."""
-    business_description: SourceGroundedValue | None = Field(
+    business_description: Optional[str]  = Field(
         default=None,
         description="Description of the company's business model, products/services, and operations"
     )
-    management_team: dict | None = Field(
+    management_team: Optional[str] = Field(
         default=None,
         description="Management team information including key executives, board composition, and assessment"
     )
@@ -386,11 +386,11 @@ class FinancialProfile(BaseModel):
 # Upsides and Growth Signals section
 class UpsidesAndGrowthSignals(BaseModel):
     """Document-stated upsides and growth signals."""
-    growth_drivers: list[SourceGroundedValue] | None = Field(
+    growth_drivers: list[str] | None = Field(
         default=None,
         description="Key drivers of business growth and expansion opportunities"
     )
-    market_opportunities: list[SourceGroundedValue] | None = Field(
+    market_opportunities: list[str] | None = Field(
         default=None,
         description="Market opportunities and expansion potential"
     )

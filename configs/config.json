@@ -139,8 +139,7 @@
             "revenue_model": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -152,8 +151,7 @@
             "value_proposition": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -301,7 +299,7 @@
             "business_description": {
               "anyOf": [
                 {
-                  "$ref": "#/$defs/SourceGroundedValue"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -435,8 +433,10 @@
             "market_share": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 {
                   "type": "null"
@@ -916,8 +916,7 @@
             "tam": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -929,8 +928,7 @@
             "sam": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -942,8 +940,7 @@
             "som": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -1030,8 +1027,7 @@
             "gross_margin": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -1043,8 +1039,7 @@
             "operating_margin": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -1056,8 +1051,7 @@
             "ebitda_margin": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -1069,8 +1063,7 @@
             "net_margin": {
               "anyOf": [
                 {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "type": "string"
                 },
                 {
                   "type": "null"
@@ -1340,7 +1333,7 @@
               "anyOf": [
                 {
                   "items": {
-                    "$ref": "#/$defs/SourceGroundedValue"
+                    "type": "string"
                   },
                   "type": "array"
                 },
@@ -1355,7 +1348,7 @@
               "anyOf": [
                 {
                   "items": {
-                    "$ref": "#/$defs/SourceGroundedValue"
+                    "type": "string"
                   },
                   "type": "array"
                 },

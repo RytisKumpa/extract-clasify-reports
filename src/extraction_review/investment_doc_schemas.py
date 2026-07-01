@@ -73,7 +73,7 @@ class DocumentMetadata(BaseModel):
         default=None,
         description="If deal_type is 'other', describe specifically."
     )
-    deal_advisors_mentioned: Optional[List[Dict[str, Any]]] = Field(
+    deal_advisors_mentioned: Optional[List[str]] = Field(
         default=None,
         description="Advisors named in the document (sellside/buyside M&A, legal, VDD provider, etc.)"
     )
@@ -114,7 +114,7 @@ class CompanyOverview(BaseModel):
         default=None,
         description="Countries where the company has commercial operations"
     )
-    legal_entity_structure: Optional[Dict[str, Any]] = Field(
+    legal_entity_structure: Optional[str] = Field(
         default=None,
         description="Legal entity structure of the company (incorporation details, legal form, holding company)"
     )
@@ -122,11 +122,11 @@ class CompanyOverview(BaseModel):
         default=None,
         description="Key leadership team — CEO, CFO, Chairman, founders, board members, etc."
     )
-    business_description: Optional[SourceGroundedValue] = Field(
+    business_description: Optional[str] = Field(
         default=None,
         description="Description of the company's business model, products/services, and operations"
     )
-    ownership_structure: Optional[Dict[str, Any]] = Field(
+    ownership_structure: Optional[str] = Field(
         default=None,
         description="Ownership structure including major shareholders and ownership percentages"
     )
@@ -139,9 +139,9 @@ class CompanyOverview(BaseModel):
 # Market Analysis section
 class MarketSize(BaseModel):
     """Market size breakdown by TAM/SAM/SOM."""
-    tam: Optional[Dict[str, Any]] = Field(default=None, description="Total Addressable Market")
-    sam: Optional[Dict[str, Any]] = Field(default=None, description="Serviceable Addressable Market")
-    som: Optional[Dict[str, Any]] = Field(default=None, description="Serviceable Obtainable Market")
+    tam: Optional[str] = Field(default=None, description="Total Addressable Market (TAM)")
+    sam: Optional[str] = Field(default=None, description="Serviceable Addressable Market (SAM)")
+    som: Optional[str] = Field(default=None, description="Serviceable Obtainable Market (SOM)")
 
 
 class CompetitiveLandscapeItem(BaseModel):
@@ -160,7 +160,7 @@ class CompetitiveAdvantageItem(BaseModel):
 
 class CompetitivePositioning(BaseModel):
     """Competitive position including market share, landscape, and advantages."""
-    market_share: Optional[Dict[str, Any]] = Field(default=None, description="Market share data")
+    market_share: Optional[List[str]] = Field(default=None, description="Market share for each year in YYYY | Share % format ")
     competitive_landscape: Optional[List[CompetitiveLandscapeItem]] = Field(
         default=None,
         description="Array of competitors and market positions"
@@ -200,8 +200,8 @@ class MoatComponentItem(BaseModel):
 
 class BusinessModel(BaseModel):
     """Business model analysis and revenue generation approach."""
-    revenue_model: Optional[Dict[str, Any]] = Field(default=None, description="Revenue model details")
-    value_proposition: Optional[Dict[str, Any]] = Field(default=None, description="Value proposition")
+    revenue_model: Optional[str] = Field(default=None, description="Revenue model details")
+    value_proposition: Optional[str] = Field(default=None, description="Value proposition")
     go_to_market_strategy: Optional[List[GoToMarketStrategyItem]] = Field(
         default=None,
         description="Array of go-to-market strategies and channels"
@@ -214,7 +214,7 @@ class CompetitiveMoat(BaseModel):
         default=None,
         description="Array of competitive moat components"
     )
-    sustainability_assessment: Optional[Dict[str, Any]] = Field(
+    sustainability_assessment: Optional[SourceGroundedValue] = Field(
         default=None,
         description="Sustainability assessment"
     )
@@ -235,15 +235,16 @@ class CompanyAnalysis(BaseModel):
 # Financial Profile section
 class FinancialStatements(BaseModel):
     """Historical financial statements and key line items."""
-    balance_sheet: Optional[Dict[str, Any]] = Field(default=None, description="Balance sheet data")
-    income_statement: Optional[Dict[str, Any]] = Field(default=None, description="Income statement data")
-    cash_flow_statement: Optional[Dict[str, Any]] = Field(default=None, description="Cash flow statement data")
+    balance_sheet: Optional[List[str]] = Field(default=None, description="Balance sheet data")
+    income_statement: Optional[List[str]] = Field(default=None, description="Income statement data")
+    cash_flow_statement: Optional[List[str]] = Field(default=None, description="Cash flow statement data")
 
 
 class RevenueBreakdownItem(BaseModel):
     """Individual revenue breakdown item."""
     category: Optional[str] = Field(default=None, description="Revenue category")
-    amount: Optional[str] = Field(default=None, description="Revenue amount or percentage")
+    amount: Optional[str] = Field(default=None, description="Revenue amount in cash terms either from the amount specified in the document or calculated from the percentage value specified.")
+    value_type: Optional[str] = Field(default=None, description="Currency with monetary amount, Percentage, Basis Points, Shares")
     growth_rate: Optional[str] = Field(default=None, description="Growth rate for the category")
     description: Optional[str] = Field(default=None, description="Additional details about the category")
 
@@ -266,10 +267,10 @@ class RevenueMix(BaseModel):
 
 class ProfitabilityMetrics(BaseModel):
     """Key profitability metrics and trends."""
-    gross_margin: Optional[Dict[str, Any]] = Field(default=None, description="Gross margin")
-    operating_margin: Optional[Dict[str, Any]] = Field(default=None, description="Operating margin")
-    ebitda_margin: Optional[Dict[str, Any]] = Field(default=None, description="EBITDA margin")
-    net_margin: Optional[Dict[str, Any]] = Field(default=None, description="Net margin")
+    gross_margin: Optional[str] = Field(default=None, description="Gross margin")
+    operating_margin: Optional[str] = Field(default=None, description="Operating margin")
+    ebitda_margin: Optional[str] = Field(default=None, description="EBITDA margin")
+    net_margin: Optional[str] = Field(default=None, description="Net margin")
 
 
 class FinancialProfile(BaseModel):
@@ -291,11 +292,11 @@ class FinancialProfile(BaseModel):
 # Growth Signals section
 class UpsidesAndGrowthSignals(BaseModel):
     """Document-stated upsides and growth signals."""
-    growth_drivers: Optional[List[SourceGroundedValue]] = Field(
+    growth_drivers: Optional[List[str]] = Field(
         default=None,
         description="Key drivers of business growth and expansion opportunities"
     )
-    market_opportunities: Optional[List[SourceGroundedValue]] = Field(
+    market_opportunities: Optional[List[str]] = Field(
         default=None,
         description="Market opportunities and expansion potential"
     )
@@ -304,15 +305,15 @@ class UpsidesAndGrowthSignals(BaseModel):
 # Risks section
 class Risks(BaseModel):
     """Document-stated risks across business, financial, operational, and regulatory categories."""
-    business_risks: Optional[List[SourceGroundedValue]] = Field(
+    business_risks: Optional[List[str]] = Field(
         default=None,
         description="Business-related risks and challenges"
     )
-    financial_risks: Optional[List[SourceGroundedValue]] = Field(
+    financial_risks: Optional[List[str]] = Field(
         default=None,
         description="Financial risks including liquidity, leverage, and market risks"
     )
-    regulatory_risks: Optional[List[SourceGroundedValue]] = Field(
+    regulatory_risks: Optional[List[str]] = Field(
         default=None,
         description="Regulatory and compliance risks"
     )
@@ -363,9 +364,9 @@ class CapitalStructure(BaseModel):
 
 class ValuationMetrics(BaseModel):
     """Valuation metrics and comparable analysis."""
-    enterprise_value: Optional[Dict[str, Any]] = Field(default=None, description="Enterprise value")
-    equity_value: Optional[Dict[str, Any]] = Field(default=None, description="Equity value")
-    multiples: Optional[Dict[str, Any]] = Field(default=None, description="Valuation multiples")
+    enterprise_value: Optional[str] = Field(default=None, description="Enterprise value")
+    equity_value: Optional[str] = Field(default=None, description="Equity value")
+    multiples: Optional[str] = Field(default=None, description="Valuation multiples")
 
 
 class ValuationAndCapitalStructure(BaseModel):
@@ -383,11 +384,11 @@ class ValuationAndCapitalStructure(BaseModel):
 # Merger/Carveout Considerations sections
 class MergerConsiderations(BaseModel):
     """Merger-specific considerations (conditional on deal type)."""
-    integration_risks: Optional[List[SourceGroundedValue]] = Field(
+    integration_risks: Optional[List[str]] = Field(
         default=None,
         description="Integration risks and challenges for merger scenarios"
     )
-    synergies: Optional[List[SourceGroundedValue]] = Field(
+    synergies: Optional[List[str]] = Field(
         default=None,
         description="Expected synergies and value creation from merger"
     )
@@ -395,11 +396,11 @@ class MergerConsiderations(BaseModel):
 
 class CarveoutConsiderations(BaseModel):
     """Carveout-specific considerations (conditional on deal type)."""
-    standalone_operations: Optional[List[SourceGroundedValue]] = Field(
+    standalone_operations: Optional[List[str]] = Field(
         default=None,
         description="Requirements and challenges for standalone operations"
     )
-    service_agreements: Optional[List[SourceGroundedValue]] = Field(
+    service_agreements: Optional[List[str]] = Field(
         default=None,
         description="Transition service agreements and shared services"
     )
